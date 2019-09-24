@@ -6,7 +6,6 @@ namespace LINQ_applications
     {
         internal static void Main()
         {
-
             Console.ReadKey();
         }
     }
