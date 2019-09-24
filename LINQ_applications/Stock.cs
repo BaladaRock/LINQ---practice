@@ -41,7 +41,7 @@ namespace LINQ_applications
         public void RemoveProduct(Product productToRemove)
         {
             var newProducts = products.Select(x => x).Where(x => x.Name != productToRemove.Name);
-            products = products.Intersect(newProducts, new CompareProducts());
+            products = products.Intersect(newProducts);
         }
 
         private static bool ThrowNull(Product productName)
@@ -52,19 +52,6 @@ namespace LINQ_applications
             }
 
             throw new ArgumentNullException(nameof(productName));
-        }
-
-        internal class CompareProducts : IEqualityComparer<Product>
-        {
-            public bool Equals(Product x, Product y)
-            {
-                return x.Name == y.Name;
-            }
-
-            public int GetHashCode(Product obj)
-            {
-                return obj.Name.ToLower().GetHashCode();
-            }
         }
     }
 }
