@@ -6,14 +6,30 @@ namespace LINQ_applications
 {
     public class Stock
     {
-        private static IEnumerable<Product> products;
+        private IEnumerable<Product> products;
 
-        public static void InitProducts(params Product[] setProducts)
+        public Stock(params Product[] setProducts)
         {
             products = setProducts;
         }
 
-        public static int GetQuantity(Product productName)
+        public void AddProducts(params Product[] productsList)
+        {
+            ThrowInvalidOperation(productsList);
+
+            foreach (var product in productsList)
+            {
+                products = products.Append(product);
+            }
+        }
+
+        public void Buy(Product product, int quantity)
+        {
+            RemoveProduct(product);
+            products = products.Append(new Product(product.Name, product.Number - 1));
+        }
+
+        public int GetQuantity(Product productName)
         {
             if (ThrowNull(productName))
             {
@@ -23,19 +39,10 @@ namespace LINQ_applications
             return products.SingleOrDefault(x => x.Name == productName.Name)?.Number ?? 0;
         }
 
-        public void AddProducts(params Product[] productsList)
-        {
-            InitProducts(productsList);
-        }
-
-        public void Buy(Product product, int quantity)
-        {
-            product.Subtract(quantity);
-        }
-
         public void Refill(Product product, int quantity)
         {
-            product.Add(quantity);
+            RemoveProduct(product);
+            products = products.Append(new Product(product.Name, product.Number + 1));
         }
 
         public void RemoveProduct(Product productToRemove)
@@ -44,7 +51,18 @@ namespace LINQ_applications
             products = products.Intersect(newProducts);
         }
 
-        private static bool ThrowNull(Product productName)
+        private void ThrowInvalidOperation(Product[] productsList)
+        {
+            var foundProducts = productsList.Intersect(products);
+            if (!foundProducts.GetEnumerator().MoveNext())
+            {
+                return;
+            }
+
+            throw new InvalidOperationException("Product already exists in stock!/t");
+        }
+
+        private bool ThrowNull(Product productName)
         {
             if (productName != null)
             {

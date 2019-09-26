@@ -11,12 +11,11 @@ namespace LINQ_applications_Facts
         {
             //Given
             var apples = new Product("apples", 10);
-            var fruits = new Stock();
-            fruits.AddProducts(apples);
+            var fruits = new Stock(apples);
             //When
             fruits.Buy(apples, 1);
             //Then
-            Assert.Equal(9, Stock.GetQuantity(apples));
+            Assert.Equal(9, fruits.GetQuantity(apples));
         }
 
         [Fact]
@@ -25,12 +24,11 @@ namespace LINQ_applications_Facts
             //Given
             var apples = new Product("apples", 10);
             var pears = new Product("pears", 5);
-            var fruits = new Stock();
-            fruits.AddProducts(apples, pears);
+            var fruits = new Stock(apples, pears);
             //When
             fruits.Buy(pears, 1);
             //Then
-            Assert.Equal(4, Stock.GetQuantity(pears));
+            Assert.Equal(4, fruits.GetQuantity(pears));
         }
 
         [Fact]
@@ -44,7 +42,7 @@ namespace LINQ_applications_Facts
             //When
             fruits.Refill(pears, 1);
             //Then
-            Assert.Equal(6, Stock.GetQuantity(pears));
+            Assert.Equal(6, fruits.GetQuantity(pears));
         }
 
         [Fact]
@@ -54,13 +52,12 @@ namespace LINQ_applications_Facts
             var apples = new Product("apples", 10);
             var pears = new Product("pears", 5);
             var watermelon = new Product("watermelon", 3);
-            var fruits = new Stock();
-            fruits.AddProducts(apples, pears);
+            var fruits = new Stock(apples, pears);
             //When
             fruits.AddProducts(watermelon);
             fruits.Buy(watermelon, 1);
             //Then
-            Assert.Equal(2, Stock.GetQuantity(watermelon));
+            Assert.Equal(2, fruits.GetQuantity(watermelon));
         }
 
         [Fact]
@@ -69,12 +66,24 @@ namespace LINQ_applications_Facts
             //Given
             var apples = new Product("apples", 10);
             var pears = new Product("pears", 5);
-            var fruits = new Stock();
-            fruits.AddProducts(apples, pears);
+            var fruits = new Stock(apples, pears);
             //When
             fruits.RemoveProduct(pears);
             //Then
-            Assert.Equal(0, Stock.GetQuantity(pears));
+            Assert.Equal(0, fruits.GetQuantity(pears));
+        }
+
+        [Fact]
+        public void Should_Throw_Exceptionwhen_product_to_be_ADDED_IS_ALREADY_in_Stock()
+        {
+            //Given
+            var apples = new Product("apples", 10);
+            var pears = new Product("pears", 5);
+            var fruits = new Stock(apples, pears);
+            //When
+            Action addException = () => fruits.AddProducts(pears);
+            //Then
+            Assert.Throws<InvalidOperationException>(addException);
         }
     }
 }

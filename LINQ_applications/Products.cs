@@ -10,16 +10,6 @@
 
         public string Name { get; }
 
-        public int Number { get; private set; }
-
-        public void Add(int product)
-        {
-            Number += product;
-        }
-
-        public void Subtract(int product)
-        {
-            Number -= product;
-        }
+        public int Number { get; }
     }
 }
