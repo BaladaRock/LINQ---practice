@@ -6,55 +6,72 @@ namespace LINQ_applications
 {
     public class Stock
     {
-        private IEnumerable<Product> products;
+        private List<Product> products;
 
-        public Stock(params Product[] setProducts)
+        public Stock()
+            : this(new List<Product>())
         {
+        }
+
+        public Stock(List<Product> setProducts)
+        {
+            ThrowNullParameters(setProducts);
             products = setProducts;
         }
 
         public void AddProducts(params Product[] productsList)
         {
-            ThrowInvalidOperation(productsList);
+            ThrowNullParameters(productsList);
 
             foreach (var product in productsList)
             {
-                products = products.Append(product);
+                ThrowNull(product);
+                ThrowInvalidOperation(product);
+                ThrowInvalidParameter(product.Number);
+
+                products = products.Append(product).ToList();
             }
         }
 
-        public void Buy(Product product, int quantity)
+        public void AddProducts(int quantity, Product product)
         {
+            ThrowNull(product);
+            ThrowNotInStock(product);
+            ThrowInvalidParameter(quantity);
+
             RemoveProduct(product);
-            products = products.Append(new Product(product.Name, product.Number - 1));
+            products = products.Append(new Product(product.Name, product.Number + quantity)).ToList();
         }
 
-        public int GetQuantity(Product productName)
+        public void Buy(int productsToBuy, Product product)
         {
-            if (ThrowNull(productName))
-            {
-                return 0;
-            }
+            ThrowNull(product);
+            ThrowInvalidParameter(productsToBuy);
 
-            return products.SingleOrDefault(x => x.Name == productName.Name)?.Number ?? 0;
+            RemoveProduct(product);
+            products = products.Append(new Product(product.Name, product.Number - productsToBuy)).ToList();
         }
 
-        public void Refill(Product product, int quantity)
+        public int GetQuantity(Product product)
         {
-            RemoveProduct(product);
-            products = products.Append(new Product(product.Name, product.Number + 1));
+            ThrowNull(product);
+            ThrowNotInStock(product);
+
+            return products.Single(x => x.Name == product.Name).Number;
         }
 
         public void RemoveProduct(Product productToRemove)
         {
+            ThrowNull(productToRemove);
+            ThrowNotInStock(productToRemove);
+
             var newProducts = products.Select(x => x).Where(x => x.Name != productToRemove.Name);
-            products = products.Intersect(newProducts);
+            products = products.Intersect(newProducts).ToList();
         }
 
-        private void ThrowInvalidOperation(Product[] productsList)
+        private void ThrowInvalidOperation(Product product)
         {
-            var foundProducts = productsList.Intersect(products);
-            if (!foundProducts.GetEnumerator().MoveNext())
+            if (!products.Contains(product))
             {
                 return;
             }
@@ -62,14 +79,44 @@ namespace LINQ_applications
             throw new InvalidOperationException("Product already exists in stock!/t");
         }
 
-        private bool ThrowNull(Product productName)
+        private void ThrowInvalidParameter(int quantity)
+        {
+            if (quantity >= 0)
+            {
+                return;
+            }
+
+            throw new ArgumentException("Quantity must be positive!/t");
+        }
+
+        private void ThrowNotInStock(Product product)
+        {
+            if (products.Select(x => x.Name).Contains(product.Name))
+            {
+                return;
+            }
+
+            throw new InvalidOperationException("Product is not in stock!/t");
+        }
+
+        private void ThrowNull(Product productName)
         {
             if (productName != null)
             {
-                return false;
+                return;
             }
 
             throw new ArgumentNullException(nameof(productName));
+        }
+
+        private void ThrowNullParameters(IEnumerable<Product> productsList)
+        {
+            if (productsList != null)
+            {
+                return;
+            }
+
+            throw new ArgumentNullException(nameof(productsList));
         }
     }
 }
