@@ -6,6 +6,7 @@ namespace LINQ_applications
 {
     public class Stock
     {
+        private Action<Product, int> callback;
         private List<Product> products;
 
         public Stock()
@@ -33,23 +34,28 @@ namespace LINQ_applications
             }
         }
 
-        public void AddProducts(int quantity, Product product)
+        public void AddProducts(int quantity, string productName)
         {
-            ThrowNull(product);
-            ThrowNotInStock(product);
+            var foundNode = products.Single(x => x.Name == productName);
+            ThrowNull(foundNode);
+            ThrowNotInStock(foundNode);
             ThrowInvalidParameter(quantity);
 
-            RemoveProduct(product);
-            products = products.Append(new Product(product.Name, product.Number + quantity)).ToList();
+            RemoveProduct(foundNode);
+            products = products.Append(new Product(foundNode.Name, foundNode.Number + quantity)).ToList();
         }
 
-        public void Buy(int productsToBuy, Product product)
+        public Action<Product, int> Buy(int productsToBuy, string productName)
         {
-            ThrowNull(product);
+            var foundNode = products.Single(x => x.Name == productName);
+            ThrowNull(foundNode);
             ThrowInvalidParameter(productsToBuy);
 
-            RemoveProduct(product);
-            products = products.Append(new Product(product.Name, product.Number - productsToBuy)).ToList();
+            var newProduct = new Product(foundNode.Name, foundNode.Number - productsToBuy);
+            RemoveProduct(foundNode);
+            products = products.Append(newProduct).ToList();
+
+            return CallBackProduct(newProduct);
         }
 
         public int GetQuantity(Product product)
@@ -67,6 +73,20 @@ namespace LINQ_applications
 
             var newProducts = products.Select(x => x).Where(x => x.Name != productToRemove.Name);
             products = products.Intersect(newProducts).ToList();
+        }
+
+        private Action<Product, int> CallBackProduct(Product product)
+        {
+            if (product.Number < 10 || product.Number < 5 || product.Number < 2)
+            {
+                callback = (x, y) => CheckQuantity(product, product.Number);
+            }
+
+            return callback;
+        }
+
+        private void CheckQuantity(Product newProduct, int number)
+        {
         }
 
         private void ThrowInvalidOperation(Product product)

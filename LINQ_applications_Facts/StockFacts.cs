@@ -17,7 +17,7 @@ namespace LINQ_applications_Facts
             var fruits = new Stock(new List<Product> { apples, pears });
             //When
             fruits.AddProducts(watermelon);
-            fruits.Buy(1, watermelon);
+            fruits.Buy(1, "watermelon");
             //Then
             Assert.Equal(2, fruits.GetQuantity(watermelon));
         }
@@ -31,7 +31,7 @@ namespace LINQ_applications_Facts
             var fruits = new Stock();
             fruits.AddProducts(apples, pears);
             //When
-            fruits.AddProducts(1, pears);
+            fruits.AddProducts(1, "pears");
             //Then
             Assert.Equal(6, fruits.GetQuantity(pears));
         }
@@ -44,7 +44,7 @@ namespace LINQ_applications_Facts
             var pears = new Product("pears", 5);
             var fruits = new Stock(new List<Product> { apples, pears });
             //When
-            fruits.Buy(1, pears);
+            fruits.Buy(1, "pears");
             //Then
             Assert.Equal(4, fruits.GetQuantity(pears));
         }
@@ -56,7 +56,7 @@ namespace LINQ_applications_Facts
             var apples = new Product("apples", 10);
             var fruits = new Stock(new List<Product> { apples });
             //When
-            fruits.Buy(1, apples);
+            fruits.Buy(1, "apples");
             //Then
             Assert.Equal(9, fruits.GetQuantity(apples));
         }
@@ -105,7 +105,7 @@ namespace LINQ_applications_Facts
             var pears = new Product("pears", 5);
             var fruits = new Stock(new List<Product> { apples });
             //When
-            Action addException = () => fruits.AddProducts(2, pears);
+            Action addException = () => fruits.AddProducts(2, "pears");
             //Then
             Assert.Throws<InvalidOperationException>(addException);
         }
@@ -142,6 +142,24 @@ namespace LINQ_applications_Facts
             Action addException = () => fruits.RemoveProduct(null);
             //Then
             Assert.Throws<ArgumentNullException>(addException);
+        }
+
+        [Fact]
+        public void Should_CallBack_after_Removing_1_element_From_10_Products()
+        {
+            //Given
+            var apples = new Product("apples", 10);
+            var fruits = new Stock(new List<Product> { apples });
+            //When
+            void TestMethod(Product product, int quantity)
+            {
+                product = apples;
+                quantity = apples.Number;
+            }
+
+            fruits.Buy(1, "apples");
+            //Then
+            Assert.Equal(new Action<Product, int>(TestMethod), fruits.Buy(2, "apples"));
         }
     }
 }
