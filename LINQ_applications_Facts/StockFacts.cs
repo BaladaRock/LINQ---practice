@@ -151,6 +151,7 @@ namespace LINQ_applications_Facts
             var apples = new Product("apples", 10);
             var fruits = new Stock(new List<Product> { apples });
             //When
+            Action<Product, int> callBack;
             void TestMethod(Product product, int quantity)
             {
                 product = apples;
@@ -159,7 +160,8 @@ namespace LINQ_applications_Facts
 
             fruits.Buy(1, "apples");
             //Then
-            Assert.Equal(new Action<Product, int>(TestMethod), fruits.Buy(2, "apples"));
+            Action<Product, int> expected = callBack = (_, __) => TestMethod(apples, apples.Number);
+            Assert.Equal(expected, fruits.Buy(2, "apples"));
         }
     }
 }
