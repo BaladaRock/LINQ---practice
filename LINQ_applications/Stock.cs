@@ -71,15 +71,6 @@ namespace LINQ_applications
             return products.Single(x => x.Name == product.Name).Number;
         }
 
-        public void RemoveProduct(Product productToRemove)
-        {
-            ThrowNull(productToRemove);
-            ThrowNotInStock(productToRemove);
-
-            var newProducts = products.Select(x => x).Where(x => x.Name != productToRemove.Name);
-            products = products.Intersect(newProducts).ToList();
-        }
-
         private void CallBackProduct(Product product, int oldQuantity)
         {
             if (callback == null || !CheckCallBack(product, oldQuantity))
@@ -102,6 +93,15 @@ namespace LINQ_applications
         private bool CheckQuantities(int oldQuantity, int currentQuantity, int limit)
         {
             return oldQuantity >= limit && currentQuantity < limit;
+        }
+
+        private void RemoveProduct(Product productToRemove)
+        {
+            ThrowNull(productToRemove);
+            ThrowNotInStock(productToRemove);
+
+            var newProducts = products.Select(x => x).Where(x => x.Name != productToRemove.Name);
+            products = products.Intersect(newProducts).ToList();
         }
 
         private void ThrowInvalidOperation(Product product)

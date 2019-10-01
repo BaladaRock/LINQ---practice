@@ -102,22 +102,9 @@ namespace LINQ_applications_Facts
         {
             //Given
             var apples = new Product("apples", 10);
-            var pears = new Product("pears", 5);
             var fruits = new Stock(new List<Product> { apples });
             //When
             Action addException = () => fruits.AddProducts(2, "pears");
-            //Then
-            Assert.Throws<InvalidOperationException>(addException);
-        }
-
-        [Fact]
-        public void Should_Throw_Exception_when_Product_TO_Remove_IS_NOT_in_Stock()
-        {
-            //Given
-            var apples = new Product("apples", 10);
-            var fruits = new Stock();
-            //When
-            Action addException = () => fruits.RemoveProduct(apples);
             //Then
             Assert.Throws<InvalidOperationException>(addException);
         }
@@ -131,17 +118,6 @@ namespace LINQ_applications_Facts
             Action addException = () => fruits.AddProducts(new Product("apples", -3));
             //Then
             Assert.Throws<ArgumentException>(addException);
-        }
-
-        [Fact]
-        public void Should_Throw_NULL_Exception_For_Remove()
-        {
-            //Given
-            var fruits = new Stock();
-            //When
-            Action addException = () => fruits.RemoveProduct(null);
-            //Then
-            Assert.Throws<ArgumentNullException>(addException);
         }
 
         [Fact]
