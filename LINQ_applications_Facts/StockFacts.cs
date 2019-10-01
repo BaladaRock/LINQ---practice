@@ -151,17 +151,83 @@ namespace LINQ_applications_Facts
             var apples = new Product("apples", 10);
             var fruits = new Stock(new List<Product> { apples });
             //When
-            Action<Product, int> callBack;
+            int testQuantity = 0;
+            Product testProduct = null;
             void TestMethod(Product product, int quantity)
             {
-                product = apples;
-                quantity = apples.Number;
+                testProduct = product;
+                testQuantity = quantity;
             }
-
+            fruits.AddCallback(TestMethod);
             fruits.Buy(1, "apples");
             //Then
-            Action<Product, int> expected = callBack = (_, __) => TestMethod(apples, apples.Number);
-            Assert.Equal(expected, fruits.Buy(2, "apples"));
+            Assert.NotNull(testProduct);
+            Assert.Equal(apples.Name, testProduct.Name);
+            Assert.Equal(9, testQuantity);
+        }
+
+        [Fact]
+        public void Should_CallBack_only_ONCE_after_Consecutive_Buys()
+        {
+            //Given
+            var fruits = new Stock(new List<Product> { new Product("apples", 10) });
+            //When
+            int testQuantity = 0;
+            Product testProduct = null;
+            void TestMethod(Product product, int quantity)
+            {
+                testProduct = product;
+                testQuantity = quantity;
+            }
+            fruits.AddCallback(TestMethod);
+            fruits.Buy(1, "apples");
+            fruits.Buy(1, "apples");
+            //Then
+            Assert.Equal("apples", testProduct.Name);
+            Assert.Equal(9, testQuantity);
+        }
+
+        [Fact]
+        public void Should_correctly_CallBack_after_Consecutive_Buys()
+        {
+            //Given
+            var fruits = new Stock(new List<Product> { new Product("apples", 10) });
+            //When
+            int testQuantity = 0;
+            Product testProduct = null;
+            void TestMethod(Product product, int quantity)
+            {
+                testProduct = product;
+                testQuantity = quantity;
+            }
+            fruits.AddCallback(TestMethod);
+            fruits.Buy(1, "apples");
+            fruits.Buy(1, "apples");
+            fruits.Buy(4, "apples");
+            //Then
+            Assert.Equal(4, testQuantity);
+        }
+
+        [Fact]
+        public void Test_CallBack_Final_Check()
+        {
+            //Given
+            var fruits = new Stock(new List<Product> { new Product("apples", 10) });
+            //When
+            int testQuantity = 0;
+            Product testProduct = null;
+            void TestMethod(Product product, int quantity)
+            {
+                testProduct = product;
+                testQuantity = quantity;
+            }
+            fruits.AddCallback(TestMethod);
+            fruits.Buy(1, "apples");
+            fruits.Buy(1, "apples");
+            fruits.Buy(4, "apples");
+            fruits.Buy(1, "apples");
+            //Then
+            Assert.Equal(4, testQuantity);
         }
     }
 }

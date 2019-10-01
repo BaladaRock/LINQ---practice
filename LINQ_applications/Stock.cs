@@ -20,6 +20,11 @@ namespace LINQ_applications
             products = setProducts;
         }
 
+        public void AddCallback(Action<Product, int> callback)
+        {
+            this.callback = callback;
+        }
+
         public void AddProducts(params Product[] productsList)
         {
             ThrowNullParameters(productsList);
@@ -45,7 +50,7 @@ namespace LINQ_applications
             products = products.Append(new Product(foundNode.Name, foundNode.Number + quantity)).ToList();
         }
 
-        public Action<Product, int> Buy(int productsToBuy, string productName)
+        public void Buy(int productsToBuy, string productName)
         {
             var foundNode = products.Single(x => x.Name == productName);
             ThrowNull(foundNode);
@@ -55,7 +60,7 @@ namespace LINQ_applications
             RemoveProduct(foundNode);
             products = products.Append(newProduct).ToList();
 
-            return CallBackProduct(newProduct);
+            CallBackProduct(newProduct, foundNode.Number);
         }
 
         public int GetQuantity(Product product)
@@ -75,18 +80,28 @@ namespace LINQ_applications
             products = products.Intersect(newProducts).ToList();
         }
 
-        private Action<Product, int> CallBackProduct(Product product)
+        private void CallBackProduct(Product product, int oldQuantity)
         {
-            if (product.Number < 10 || product.Number < 5 || product.Number < 2)
+            if (callback == null || !CheckCallBack(product, oldQuantity))
             {
-                callback = (x, y) => CheckQuantity(product, product.Number);
+                return;
             }
 
-            return callback;
+            callback(product, product.Number);
         }
 
-        private void CheckQuantity(Product newProduct, int number)
+        private bool CheckCallBack(Product product, int oldQuantity)
         {
+            var currentQuantity = product.Number;
+
+            return CheckQuantities(oldQuantity, currentQuantity, 10)
+                || CheckQuantities(oldQuantity, currentQuantity, 5)
+                || CheckQuantities(oldQuantity, currentQuantity, 2);
+        }
+
+        private bool CheckQuantities(int oldQuantity, int currentQuantity, int limit)
+        {
+            return oldQuantity >= limit && currentQuantity < limit;
         }
 
         private void ThrowInvalidOperation(Product product)
