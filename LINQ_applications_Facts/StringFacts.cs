@@ -88,12 +88,30 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void Test_UniqueChar_Should_Return_correctly_For_More_COMPLEX_Word()
+        public void Test_UniqueChar_Should_Return_Second_Letter()
         {
             //Given, When
             char letter = StringOperations.FirstUniqueCharacter("aabcd");
             //Then
             Assert.Equal('b', letter);
+        }
+
+        [Fact]
+        public void Test_UniqueChar_Should_Return_correctly_For_More_COMPLEX_Word()
+        {
+            //Given, When
+            char letter = StringOperations.FirstUniqueCharacter("ababbbcd");
+            //Then
+            Assert.Equal('c', letter);
+        }
+
+        [Fact]
+        public void Test_UniqueChar_Should_Return_Null_When_NO_Character_was_Found()
+        {
+            //Given, When
+            Action exception = () => StringOperations.FirstUniqueCharacter("ababbbcc");
+            //Then
+            Assert.Throws<InvalidOperationException>(exception);
         }
     }
 }

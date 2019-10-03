@@ -23,8 +23,8 @@ namespace LINQ_applications
         {
             ThrowNullException(word);
 
-            var uniqueCharacters = word.Distinct();
-            return uniqueCharacters.First();
+            var characters = word.GroupBy(x => x, (x, enumerable) => string.Join("", enumerable));
+            return characters.Select(x => x).First((y) => y.Count() == 1).First();
         }
 
         private static void ThrowNullException(string word)

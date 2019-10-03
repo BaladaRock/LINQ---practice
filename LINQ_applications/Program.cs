@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LINQ_applications
 {
@@ -17,6 +18,11 @@ namespace LINQ_applications
             stock.AddCallback(Method);
             stock.Buy(3, "mere");
             stock.Buy(5, "mere");
+
+            foreach (var group in "AAbcd".GroupBy(x => x))
+            {
+                Console.WriteLine(group);
+            }
 
             Console.ReadKey();
         }
