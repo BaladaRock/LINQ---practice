@@ -13,18 +13,6 @@ namespace LINQ_applications
             return word.Aggregate(0, (totalNumber, currentChar) => totalNumber + currentChar);
         }
 
-        public static int CountConsonants(string word)
-        {
-            ThrowNullException(word);
-
-            return word.Count() - CountVocals(word);
-        }
-
-        public static int CountVocals(string word)
-        {
-            return word.Intersect("AEIOUaeiou").Count();
-        }
-
         public static char FirstUniqueCharacter(string word)
         {
             ThrowNullException(word);
@@ -49,6 +37,16 @@ namespace LINQ_applications
                 .OrderByDescending(x => x.Count())
                 .Select(g => g.Key)
                 .First();
+        }
+
+        public static (int vocals, int consonants) VocalsAndConsonants(string word)
+        {
+            ThrowNullException(word);
+
+            return word.Aggregate((0, 0), (tuplure, currentLetter)
+                => "AEIOUaeiou".Contains(currentLetter)
+                ? (tuplure.Item1 + 1, tuplure.Item2)
+                : (tuplure.Item1, tuplure.Item2 + 1));
         }
 
         private static IEnumerable<string> GroupCharacters(string word)

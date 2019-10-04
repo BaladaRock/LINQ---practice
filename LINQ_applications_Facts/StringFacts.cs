@@ -7,33 +7,6 @@ namespace LINQ_applications_Facts
     public class StringFactsFacts
     {
         [Fact]
-        public void Test_Consonants_Counter_Should_Correctly_Count_Consonants_from_inputString()
-        {
-            //Given, When
-            int count = StringOperations.CountConsonants("AandDrEei");
-            //Then
-            Assert.Equal(4, count);
-        }
-
-        [Fact]
-        public void Test_Consonants_Should_return_Zero_String_has_NO_Consonants()
-        {
-            //Given, When
-            int count = StringOperations.CountConsonants("AeEiou");
-            //Then
-            Assert.Equal(0, count);
-        }
-
-        [Fact]
-        public void Test_Consonants_Should_Throw_Exception_When_String_is_NULL()
-        {
-            //Given, When
-            Action exception = () => StringOperations.CountConsonants(null);
-            //Then
-            Assert.Throws<ArgumentNullException>(exception);
-        }
-
-        [Fact]
         public void Test_ConvertToInt_Should_convert_longer_STRING_to_Int()
         {
             //Given, When
@@ -52,12 +25,57 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void Test_MostAparitions_Word_Has_More_Chars()
+        public void Test_Counter_Should_Correctly_Count_Vocals_for_Upper_Case()
         {
             //Given, When
-            char letter = StringOperations.MostAparitionsChar("dbbdcdada");
+            (int, int) count = StringOperations.VocalsAndConsonants("AandDrEei");
             //Then
-            Assert.Equal('d', letter);
+            Assert.Equal((5, 4), count);
+        }
+
+        [Fact]
+        public void Test_Counter_should_correctly_count_VOCALS_word_has_ONE_char()
+        {
+            //Given, When
+            (int, int) count = StringOperations.VocalsAndConsonants("a");
+            //Then
+            Assert.Equal((1, 0), count);
+        }
+
+        [Fact]
+        public void Test_Counter_Should_correctly_count_vocals_WORD_has_Only_Vocals()
+        {
+            //Given, When
+            (int, int) count = StringOperations.VocalsAndConsonants("aei");
+            //Then
+            Assert.Equal((3, 0), count);
+        }
+
+        [Fact]
+        public void Test_Counter_Should_count_vocals_WORD_has_Vocals_AND_Consonants()
+        {
+            //Given, When
+            (int, int) count = StringOperations.VocalsAndConsonants("abe");
+            //Then
+            Assert.Equal((2, 1), count);
+        }
+
+        [Fact]
+        public void Test_Counter_Should_return_Zero_String_has_NO_Consonants()
+        {
+            //Given, When
+            (int, int) count = StringOperations.VocalsAndConsonants("AeEiou");
+            //Then
+            Assert.Equal((6, 0), count);
+        }
+
+        [Fact]
+        public void Test_Counter_Should_Throw_Exception_When_String_is_NULL()
+        {
+            //Given, When
+            Action exception = () => StringOperations.VocalsAndConsonants(null);
+            //Then
+            Assert.Throws<ArgumentNullException>(exception);
         }
 
         [Fact]
@@ -67,6 +85,15 @@ namespace LINQ_applications_Facts
             char letter = StringOperations.MostAparitionsChar("abccbd");
             //Then
             Assert.Equal('b', letter);
+        }
+
+        [Fact]
+        public void Test_MostAparitions_Word_Has_More_Chars()
+        {
+            //Given, When
+            char letter = StringOperations.MostAparitionsChar("dbbdcdada");
+            //Then
+            Assert.Equal('d', letter);
         }
 
         [Fact]
@@ -121,51 +148,6 @@ namespace LINQ_applications_Facts
             char letter = StringOperations.FirstUniqueCharacter("aabcd");
             //Then
             Assert.Equal('b', letter);
-        }
-
-        [Fact]
-        public void Test_VOCALS_Counter_Should_correctly_count_vocals_WORD_has_ONE_char()
-        {
-            //Given, When
-            int count = StringOperations.CountVocals("a");
-            //Then
-            Assert.Equal(1, count);
-        }
-
-        [Fact]
-        public void Test_VOCALS_Counter_Should_correctly_count_vocals_WORD_has_Only_Vocals()
-        {
-            //Given, When
-            int count = StringOperations.CountVocals("aei");
-            //Then
-            Assert.Equal(3, count);
-        }
-
-        [Fact]
-        public void Test_VOCALS_Counter_Should_Correctly_Work_for_Upper_Case()
-        {
-            //Given, When
-            int count = StringOperations.CountVocals("AandDrEei");
-            //Then
-            Assert.Equal(5, count);
-        }
-
-        [Fact]
-        public void Test_VOCALS_Counter_Should_count_vocals_WORD_has_Vocals_AND_Consonants()
-        {
-            //Given, When
-            int count = StringOperations.CountVocals("abe");
-            //Then
-            Assert.Equal(2, count);
-        }
-
-        [Fact]
-        public void Test_Vocals_Should_Throw_Exception_When_String_is_NULL()
-        {
-            //Given, When
-            Action exception = () => StringOperations.CountVocals(null);
-            //Then
-            Assert.Throws<ArgumentNullException>(exception);
         }
     }
 }
