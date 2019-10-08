@@ -25,6 +25,15 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
+        public void Test_ConvertToInt_Should_work_correctly_when_string_is_Number()
+        {
+            //Given, When
+            int conversion = StringOperations.ConvertToInteger("123");
+            //Then
+            Assert.Equal(123, conversion);
+        }
+
+        [Fact]
         public void Test_Counter_Should_Correctly_Count_Vocals_for_Upper_Case()
         {
             //Given, When
@@ -109,9 +118,9 @@ namespace LINQ_applications_Facts
         public void Test_Palindroms_For_Simple_Word()
         {
             //Given, When
-            var palindroms = StringOperations.GeneratePalindroms("aaa");
+            var palindroms = StringOperations.GeneratePalindroms("aba");
             //Then
-            Assert.Equal(new[] { "a" }, palindroms);
+            Assert.Equal(new[] { "aba" }, palindroms);
         }
 
         [Fact]
