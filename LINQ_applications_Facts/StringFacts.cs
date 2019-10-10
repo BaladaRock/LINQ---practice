@@ -7,28 +7,82 @@ namespace LINQ_applications_Facts
     public class StringFactsFacts
     {
         [Fact]
-        public void Test_ConvertToInt_Should_convert_longer_STRING_to_Int()
+        public void Test_ConvertToInt_Should_Throw_exception_String_contains_Digits_and_is_NOT_Number()
         {
             //Given, When
-            int conversion = StringOperations.ConvertToInteger("abc");
+            Action conversion = () => StringOperations.ConvertStringToInt("1a");
             //Then
-            Assert.Equal(294, conversion);
+            Assert.Throws<FormatException>(conversion);
         }
 
         [Fact]
-        public void Test_ConvertToInt_Should_Convert_single_CHAR_to_int()
+        public void Test_ConvertToInt_Should_Throw_Exception_String_is_NOT_int()
         {
             //Given, When
-            int conversion = StringOperations.ConvertToInteger("a");
+            Action exception = () => StringOperations.ConvertStringToInt("abc");
             //Then
-            Assert.Equal(97, conversion);
+            Assert.Throws<FormatException>(exception);
+        }
+
+        [Fact]
+        public void Test_ConvertToInt_Should_work_correctly_when_string_is_Digit()
+        {
+            //Given, When
+            int conversion = StringOperations.ConvertStringToInt("1");
+            //Then
+            Assert.Equal(1, conversion);
         }
 
         [Fact]
         public void Test_ConvertToInt_Should_work_correctly_when_string_is_Number()
         {
             //Given, When
-            int conversion = StringOperations.ConvertToInteger("123");
+            int conversion = StringOperations.ConvertStringToInt("123");
+            //Then
+            Assert.Equal(123, conversion);
+        }
+
+        [Fact]
+        public void Test_ConvertToInt_String_is_Number_and_has_SIGN()
+        {
+            //Given, When
+            int conversion = StringOperations.ConvertStringToInt("+123");
+            //Then
+            Assert.Equal(123, conversion);
+        }
+
+        [Fact]
+        public void Test_ConvertToInt_String_is_Number_and_has_WhiteSpacesAndSign()
+        {
+            //Given, When
+            int conversion = StringOperations.ConvertStringToInt(" -123");
+            //Then
+            Assert.Equal(123, conversion);
+        }
+
+        [Fact]
+        public void Test_ConvertToInt_String_is_Number_and_has_WhiteSpacesAtTheBeginning()
+        {
+            //Given, When
+            int conversion = StringOperations.ConvertStringToInt(" 123");
+            //Then
+            Assert.Equal(123, conversion);
+        }
+
+        [Fact]
+        public void Test_ConvertToInt_String_is_Number_and_has_WhiteSpacesAtTheEnd()
+        {
+            //Given, When
+            int conversion = StringOperations.ConvertStringToInt("123 ");
+            //Then
+            Assert.Equal(123, conversion);
+        }
+
+        [Fact]
+        public void Test_ConvertToInt_String_is_Number_and_has_More_Leading_Whitespaces()
+        {
+            //Given, When
+            int conversion = StringOperations.ConvertStringToInt("   123");
             //Then
             Assert.Equal(123, conversion);
         }
@@ -94,6 +148,15 @@ namespace LINQ_applications_Facts
             char letter = StringOperations.MostAparitionsChar("abccbd");
             //Then
             Assert.Equal('b', letter);
+        }
+
+        [Fact]
+        public void Test_MostAparitions_Should_Throw_Exception_For_Empty_String()
+        {
+            //Given, When
+            Action exception = () => StringOperations.MostAparitionsChar(string.Empty);
+            //Then
+            Assert.Throws<InvalidOperationException>(exception);
         }
 
         [Fact]

@@ -6,26 +6,20 @@ namespace LINQ_applications
 {
     public class StringOperations
     {
-        public static int ConvertToInteger(string word)
+        public static int ConvertStringToInt(string word)
         {
             ThrowNullException(word);
 
-            return word.Aggregate(0, (totalNumber, currentChar) => totalNumber + currentChar);
+            return ConvertToInt(word);
         }
 
         public static char FirstUniqueCharacter(string word)
         {
             ThrowNullException(word);
 
-            foreach (var grouping in word.GroupBy(x => x))
-            {
-                if (grouping.Count() == 1)
-                {
-                    return grouping.Key;
-                }
-            }
-
-            throw new InvalidOperationException("No unique character was found!/t");
+            return word.GroupBy(x => x)
+                .First(x => x.Count() == 1)
+                .Key;
         }
 
         public static IEnumerable<string> GeneratePalindroms(string word)
@@ -41,29 +35,45 @@ namespace LINQ_applications
         {
             ThrowNullException(word);
 
-            char result = ' ';
-            int maxApparitions = 0;
-            foreach (var grouping in word.GroupBy(x => x))
-            {
-                int count = grouping.Count();
-                if (count > maxApparitions)
-                {
-                    maxApparitions = count;
-                    result = grouping.Key;
-                }
-            }
-
-            return result;
+            return word.GroupBy(x => x)
+                .Aggregate((occurencies, currentElement) =>
+                currentElement.Count() > occurencies.Count()
+                ? currentElement
+                : occurencies).Key;
         }
 
         public static (int vocals, int consonants) VocalsAndConsonants(string word)
         {
             ThrowNullException(word);
 
-            return word.Aggregate((0, 0), (tuplure, currentLetter)
-                => "AEIOUaeiou".Contains(currentLetter)
+            return word.Aggregate((0, 0), (tuplure, currentLetter) =>
+                "AEIOUaeiou".Contains(currentLetter)
                 ? (tuplure.Item1 + 1, tuplure.Item2)
                 : (tuplure.Item1, tuplure.Item2 + 1));
+        }
+
+        private static int ConvertDigitToInt(char letter, string source)
+        {
+            if (IsDigit(letter))
+            {
+                return letter - '0';
+            }
+
+            throw new FormatException("String does not meet Int32 requirements");
+        }
+
+        private static int ConvertToInt(string word)
+        {
+            const int positionPower = 10;
+            string newWord = RemoveExtraCharacters(word);
+
+            return newWord.Aggregate(0, (sum, currentDigit) =>
+                    sum * positionPower + ConvertDigitToInt(currentDigit, newWord));
+        }
+
+        private static bool IsDigit(char digit)
+        {
+            return digit >= '0' && digit <= '9';
         }
 
         private static bool IsPalindrom(string word)
@@ -75,6 +85,18 @@ namespace LINQ_applications
             return firstHalf.Equals(reversedSecondHalf);
         }
 
+        private static string RemoveExtraCharacters(string word)
+        {
+            if (word.First() == ' ' || word.Last() == ' ')
+            {
+                word = word.Trim();
+            }
+
+            return "+-".Contains(word.First())
+                ? word.Substring(1)
+                : word;
+        }
+
         private static void ThrowNullException(string word)
         {
             if (word != null)
@@ -83,11 +105,6 @@ namespace LINQ_applications
             }
 
             throw new ArgumentNullException(nameof(word));
-        }
-
-        private string GetPalindromHalf(string initialWord, int startPosition, int finishPosition)
-        {
-            return "";
         }
     }
 }
