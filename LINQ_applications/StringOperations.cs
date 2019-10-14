@@ -26,9 +26,12 @@ namespace LINQ_applications
         {
             ThrowNullException(word);
 
-            bool flag = IsPalindrom("ab ba");
-            var palindrom = word.GroupBy(x => x);
-            return new[] { "" };
+            return word.SelectMany(
+                (_, index) =>
+                word
+                    .Substring(index)
+                    .Select((x, secondIndex) => word.Substring(index, word.Length - secondIndex - index)))
+               .Where(x => IsPalindrom(x));
         }
 
         public static char MostAparitionsChar(string word)
@@ -78,11 +81,7 @@ namespace LINQ_applications
 
         private static bool IsPalindrom(string word)
         {
-            int halfWord = word.Length / 2;
-            string firstHalf = word.Substring(0, halfWord);
-            IEnumerable<char> reversedSecondHalf = word.Substring(halfWord + 1, halfWord).Reverse();
-
-            return firstHalf.Equals(reversedSecondHalf);
+            return word.Take(word.Length).ToString() == word.Reverse().ToString();
         }
 
         private static string RemoveExtraCharacters(string word)

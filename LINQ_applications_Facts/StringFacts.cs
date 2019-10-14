@@ -1,5 +1,7 @@
 ﻿using LINQ_applications;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace LINQ_applications_Facts
@@ -43,6 +45,15 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
+        public void Test_ConvertToInt_String_is_Number_and_has_More_Leading_Whitespaces()
+        {
+            //Given, When
+            int conversion = StringOperations.ConvertStringToInt("   123");
+            //Then
+            Assert.Equal(123, conversion);
+        }
+
+        [Fact]
         public void Test_ConvertToInt_String_is_Number_and_has_SIGN()
         {
             //Given, When
@@ -74,15 +85,6 @@ namespace LINQ_applications_Facts
         {
             //Given, When
             int conversion = StringOperations.ConvertStringToInt("123 ");
-            //Then
-            Assert.Equal(123, conversion);
-        }
-
-        [Fact]
-        public void Test_ConvertToInt_String_is_Number_and_has_More_Leading_Whitespaces()
-        {
-            //Given, When
-            int conversion = StringOperations.ConvertStringToInt("   123");
             //Then
             Assert.Equal(123, conversion);
         }
@@ -180,10 +182,35 @@ namespace LINQ_applications_Facts
         [Fact]
         public void Test_Palindroms_For_Simple_Word()
         {
-            //Given, When
-            var palindroms = StringOperations.GeneratePalindroms("aba");
+            //Given
+            IEnumerable<string> enumerable = new[] { "a", "b", "c" };
+            //When
+            var palindroms = StringOperations.GeneratePalindroms("abc");
             //Then
-            Assert.Equal(new[] { "aba" }, palindroms);
+            Assert.Empty(palindroms.Except(enumerable));
+        }
+
+        [Fact]
+        public void Test_Palindroms_Longer_Word()
+        {
+            //Given
+            IEnumerable<string> enumerable = new[] { "a","b", "c", "aa",
+                                                "aaa", "aaaa", "aba", "aabaa" };
+            // When
+            var palindroms = StringOperations.GeneratePalindroms("aabaac").Distinct();
+            //Then
+            Assert.Empty(palindroms.Except(enumerable));
+        }
+
+        [Fact]
+        public void Test_Palindroms_Longer_Word_One_Character()
+        {
+            //Given
+            IEnumerable<string> enumerable = new[] { "a", "a", "a", "aa", "aa", "aa", "aaa" };
+            // When
+            var palindroms = StringOperations.GeneratePalindroms("aaa");
+            //Then
+            Assert.Empty(palindroms.Except(enumerable));
         }
 
         [Fact]
