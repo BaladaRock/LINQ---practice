@@ -12,15 +12,13 @@ namespace LINQ_applications_Facts
         {
             //Given
             int[] array = { 1, 2, 3, 5, 4 };
-
-            IEnumerable<IEnumerable<int>> result = new[] {
-                new int[] { 4 }, new int[] { 1 }, new int[] { 2 },
-                new int[] { 3 }, new int[] { 1, 2 }, new int[] {1, 3 }
-            };
             //When
-            var subSets = NumberOperations.GenerateSubsets(array, 4).Distinct();
+            IEnumerable<IEnumerable<int>> enumerable = NumberOperations.GenerateSubsets(array, 4);
             //Then
-            Assert.Empty(subSets.Except(result));
+            Assert.Equal(new[]
+            { new int[] { 1, 2 }, new int[] { 1 },
+                new int[] { 2 }, new int[] { 3 }, new int[] { 4 } }
+            , enumerable);
         }
 
         [Fact]

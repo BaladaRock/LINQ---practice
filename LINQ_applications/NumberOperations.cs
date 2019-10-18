@@ -12,15 +12,15 @@ namespace LINQ_applications
 
             return array.SelectMany(
                 (_, startingPosition)
-                     => GetSubSet(array, startingPosition)
+                        => GetSubSet(array, startingPosition)
                     .Select((number, secondIndex)
                         => GetSubSet(array, startingPosition, array.Length - secondIndex - startingPosition)))
-               .Where(x => CheckSumOfElements(x, maxSum));
+                .Where(x => CheckSumOfElements(x, maxSum));
         }
 
         private static bool CheckSumOfElements(IEnumerable<int> array, int sum)
         {
-            return array.Aggregate(0, (x, y) => x + y) <= sum;
+            return array.Sum() <= sum;
         }
 
         private static IEnumerable<int> GetSubSet(IEnumerable<int> array, int startingPosition, int numbersToTake)
@@ -30,7 +30,7 @@ namespace LINQ_applications
 
         private static IEnumerable<int> GetSubSet(int[] array, int startingPosition)
         {
-            return array.Skip(startingPosition).Take(array.Length - startingPosition);
+            return GetSubSet(array, startingPosition, array.Length - startingPosition);
         }
 
         private static void ThrowNullException(IEnumerable<int> array)
