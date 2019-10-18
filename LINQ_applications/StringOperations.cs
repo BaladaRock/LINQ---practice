@@ -55,7 +55,7 @@ namespace LINQ_applications
                 : (tuplure.Item1, tuplure.Item2 + 1));
         }
 
-        private static int ConvertDigitToInt(char letter, string source)
+        private static int ConvertDigitToInt(char letter)
         {
             if (IsDigit(letter))
             {
@@ -71,7 +71,7 @@ namespace LINQ_applications
             string newWord = RemoveExtraCharacters(word);
 
             return newWord.Aggregate(0, (sum, currentDigit) =>
-                    sum * positionPower + ConvertDigitToInt(currentDigit, newWord));
+                    sum * positionPower + ConvertDigitToInt(currentDigit));
         }
 
         private static bool IsDigit(char digit)

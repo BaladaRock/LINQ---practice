@@ -1,6 +1,5 @@
 ﻿using LINQ_applications;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace LINQ_applications_Facts
@@ -41,6 +40,28 @@ namespace LINQ_applications_Facts
             var subSets = NumberOperations.GenerateSubsets(array, 1);
             //Then
             Assert.Equal(new[] { new int[] { 1 } }, subSets);
+        }
+
+        [Fact]
+        public void Test_PythagoreanNumbers_Array_Has_one_Pythagorean_Triple()
+        {
+            //Given
+            int[] array = { 3, 4, 5 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
+            //Then
+            Assert.Equal(new[] { new[] { 3, 4, 5 } }, subSets);
+        }
+
+        [Fact]
+        public void Test_PythagoreanNumbers_Should_Return_Empty_Enumerable_for_ShortArray()
+        {
+            //Given
+            int[] array = { 1, 2 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
+            //Then
+            Assert.Empty(subSets);
         }
     }
 }
