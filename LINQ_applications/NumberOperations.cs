@@ -10,9 +10,9 @@ namespace LINQ_applications
         {
             ThrowNullException(array);
 
-            return array.SelectMany((_, startingPosition) => GetSubSet(array, startingPosition)
-                                    .Select((number, secondIndex)
-                                    => GetSubSet(array, startingPosition, array.Length - secondIndex - startingPosition)))
+            return array.SelectMany((_, startPos) => GetSubSet(array, startPos)
+                                    .Select((number, secIndex)
+                                    => GetSubSet(array, startPos, array.Length - secIndex - startPos)))
                         .Where(x => CheckSumOfElements(x, maxSum));
         }
 
@@ -20,8 +20,11 @@ namespace LINQ_applications
         {
             ThrowNullException(array);
 
-            return array.SelectMany((first, index) => array.Skip(index + 1)
-                                   .Select(second => new[] { first, second }));
+            var triples = array.SelectMany((first, fstIndex) => array.Skip(fstIndex + 1)
+                                          .SelectMany((sec, secIndex) => array.Skip(fstIndex + ++secIndex + 1)
+                                                     .Select(third => new[] { first, sec, third })));
+
+            return SelectPythagoreanCombinations(triples);
         }
 
         private static bool CheckSumOfElements(IEnumerable<int> array, int sum)
@@ -37,6 +40,11 @@ namespace LINQ_applications
         private static IEnumerable<int> GetSubSet(IEnumerable<int> array, int startingPosition)
         {
             return array.Skip(startingPosition);
+        }
+
+        private static IEnumerable<IEnumerable<int>> SelectPythagoreanCombinations(IEnumerable<int[]> triples)
+        {
+            throw new NotImplementedException();
         }
 
         private static void ThrowNullException(IEnumerable<int> array)

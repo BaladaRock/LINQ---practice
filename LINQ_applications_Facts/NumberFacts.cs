@@ -43,14 +43,14 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void Test_PythagoreanNumbers_Array_Has_one_Pythagorean_Triple()
+        public void Test_PythagoreanNumbers_Array_Has_3_elements()
         {
             //Given
             int[] array = { 3, 4, 5 };
             //When
             var subSets = NumberOperations.GetPythagoreanNumbers(array);
             //Then
-            Assert.Equal(new[] { new[] { 3, 4, 5 } }, subSets);
+            Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 } }, subSets);
         }
 
         [Fact]
@@ -62,6 +62,17 @@ namespace LINQ_applications_Facts
             var subSets = NumberOperations.GetPythagoreanNumbers(array);
             //Then
             Assert.Empty(subSets);
+        }
+
+        [Fact]
+        public void Test_PythagoreanNumbers_for_Longer_Array()
+        {
+            //Given
+            int[] array = { 1, 2, 3, 4, 5 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
+            //Then
+            Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 } }, subSets);
         }
     }
 }
