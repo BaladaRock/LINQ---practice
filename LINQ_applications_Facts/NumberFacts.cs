@@ -74,5 +74,40 @@ namespace LINQ_applications_Facts
             //Then
             Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 } }, subSets);
         }
+
+        [Fact]
+        public void Test_PythagoreanNumbers_Check_That_AllCombinations_are_Checked()
+        {
+            //Given
+            int[] array = { 3, 1, 5, 4 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
+            //Then
+            Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 } }, subSets);
+        }
+
+        [Fact]
+        public void Test_PythagoreanNumbers_When_Array_Has_Repeating_Elements()
+        {
+            //Given
+            int[] array = { 0, 0, 0 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
+            //Then
+            Assert.Equal(new[] { new[] { 0, 0, 0 } }, subSets);
+        }
+
+        [Fact]
+        public void Test_PythagoreanNumbers_FinalTest()
+        {
+            //Given
+            int[] array = {1, 2, 3, 4, 5, 12, 13 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
+            //Then
+            Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 },
+                                new[] { 5, 12, 13 }, new[] { 12, 5, 13 } }
+                         , subSets);
+        }
     }
 }

@@ -21,27 +21,9 @@ namespace LINQ_applications
             ThrowNullException(array);
 
             return array.SelectMany((first, fstIndex) => array.Skip(fstIndex + 1)
-                                   .SelectMany((sec, secIndex) => array.Skip(fstIndex + ++secIndex + 1)
-                                              .Select(third => new[] { first, sec, third })))
-                        .SelectMany(combination => IsTriplePythagorean(combination)
-                                              ? GetTriplePermutations(combination).Select(x => x)
-                                              : combination);
-        }
-
-        private static bool IsTriplePythagorean(IEnumerable<int> triple)
-        {
-            int firstSquare = triple.First() * triple.First();
-            int secondSquare = triple.ElementAt(1) * triple.ElementAt(1);
-            int thirdSquare = triple.Last() * triple.Last();
-
-            if (thirdSquare >= firstSquare && thirdSquare >= secondSquare)
-            {
-                return firstSquare + secondSquare == thirdSquare;
-            }
-
-            return firstSquare >= secondSquare
-                ? firstSquare + thirdSquare == secondSquare
-                : secondSquare + thirdSquare == firstSquare;
+                                          .SelectMany((sec, secIndex) => array.Skip(fstIndex + ++secIndex + 1)
+                                                     .SelectMany(third
+                                                     => GetTriplePermutations(first, sec, third))));
         }
 
         private static bool CheckSumOfElements(IEnumerable<int> array, int sum)
@@ -59,18 +41,40 @@ namespace LINQ_applications
             return array.Skip(startingPosition);
         }
 
-        private static IEnumerable<IEnumerable<int>> GetTriplePermutations(IEnumerable<int> triple)
+        private static IEnumerable<IEnumerable<int>> GetTriplePermutations(int first, int second, int third)
         {
-            int first = triple.First();
-            int second = triple.ElementAt(1);
-            int last = triple.Last();
-
-            var elements = triple.ToList();
+            var elements = new List<int> { first, second, third };
             elements.Sort();
 
-            return last >= first
-                ? new[] { new[] { first, second, last }, new[] { second, first, last } }
-                : new[] { new[] { last, first, second }, new[] { last, second, first } };
+            if (!IsTriplePythagorean(elements[0], elements[1], elements.Last()))
+            {
+                return Enumerable.Empty<IEnumerable<int>>();
+            }
+
+            if (first == 0)
+            {
+                return new[] { new[] { first, second, third } };
+            }
+
+            if (third >= second && third >= first)
+            {
+                return MakeEnum(first, second, third);
+            }
+
+            return first >= second
+                ? MakeEnum(second, third, first)
+                : MakeEnum(first, third, second);
+        }
+
+        private static IEnumerable<IEnumerable<int>> MakeEnum(int first, int second, int third)
+        {
+            return new[] { new[] { first, second, third }, new[] { second, first, third } };
+        }
+
+        private static bool IsTriplePythagorean(int firstElement, int secondElement, int thirdElement)
+        {
+            return (firstElement * firstElement) + (secondElement * secondElement)
+                     == thirdElement * thirdElement;
         }
 
         private static void ThrowNullException(IEnumerable<int> array)
