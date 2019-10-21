@@ -1,4 +1,5 @@
 ﻿using LINQ_applications;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -108,6 +109,17 @@ namespace LINQ_applications_Facts
             Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 },
                                 new[] { 5, 12, 13 }, new[] { 12, 5, 13 } }
                          , subSets);
+        }
+
+        [Fact]
+        public void Test_SumCombinations_For_Simple_Case()
+        {
+            //Given
+            var tuple = Tuple.Create(2, 3);
+            //When
+            var combinations = NumberOperations.GetSumCombinations(tuple.Item1, tuple.Item2);
+            //Then
+            Assert.Equal(new[] { "1 + 2 = 3" }, combinations);
         }
     }
 }

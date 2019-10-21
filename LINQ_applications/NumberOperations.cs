@@ -20,10 +20,18 @@ namespace LINQ_applications
         {
             ThrowNullException(array);
 
-            return array.SelectMany((first, fstIndex) => array.Skip(fstIndex + 1)
-                                          .SelectMany((sec, secIndex) => array.Skip(fstIndex + ++secIndex + 1)
-                                                     .SelectMany(third
-                                                     => GetTriplePermutations(first, sec, third))));
+            return array.SelectMany((a, i) =>
+            {
+                var inner = array.Skip(i + 1);
+                return inner.SelectMany((b, j) =>
+                    inner.Skip(j + 1)
+                        .SelectMany(c => GetTriplePermutations(a, b, c)));
+            });
+        }
+
+        public static IEnumerable<IEnumerable<char>> GetSumCombinations(int maxNumber, int numberToCheck)
+        {
+            return null;
         }
 
         private static bool CheckSumOfElements(IEnumerable<int> array, int sum)
@@ -43,38 +51,31 @@ namespace LINQ_applications
 
         private static IEnumerable<IEnumerable<int>> GetTriplePermutations(int first, int second, int third)
         {
-            var elements = new List<int> { first, second, third };
-            elements.Sort();
-
-            if (!IsTriplePythagorean(elements[0], elements[1], elements.Last()))
-            {
-                return Enumerable.Empty<IEnumerable<int>>();
-            }
-
-            if (first == 0)
-            {
-                return new[] { new[] { first, second, third } };
-            }
-
-            if (third >= second && third >= first)
-            {
-                return MakeEnum(first, second, third);
-            }
-
-            return first >= second
-                ? MakeEnum(second, third, first)
-                : MakeEnum(first, third, second);
-        }
-
-        private static IEnumerable<IEnumerable<int>> MakeEnum(int first, int second, int third)
-        {
-            return new[] { new[] { first, second, third }, new[] { second, first, third } };
+            return PermuteElements(first, second, third)
+                   .Where(x => IsTriplePythagorean(x.First(), x.ElementAt(1), x.Last()));
         }
 
         private static bool IsTriplePythagorean(int firstElement, int secondElement, int thirdElement)
         {
             return (firstElement * firstElement) + (secondElement * secondElement)
                      == thirdElement * thirdElement;
+        }
+
+        private static IEnumerable<IEnumerable<int>> MakeEnum(int first, int second, int third)
+        {
+            return new[]
+            {
+                new[] { first, second, third }, new[] { first, third, second },
+                new[] { second, first, third }, new[] { second, third, first },
+                new[] { third, first, second }, new[] { third, second, first }
+            };
+        }
+
+        private static IEnumerable<IEnumerable<int>> PermuteElements(int first, int second, int third)
+        {
+            return first != second
+                ? MakeEnum(first, second, third)
+                : new[] { new[] { 0, 0, 0 } };
         }
 
         private static void ThrowNullException(IEnumerable<int> array)
