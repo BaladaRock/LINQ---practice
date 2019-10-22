@@ -21,7 +21,7 @@ namespace LINQ_applications
 
             foreach (var group in "AAbcd".GroupBy(x => x))
             {
-                Console.WriteLine(group);
+                Console.WriteLine(group.Key);
             }
 
             Console.ReadKey();

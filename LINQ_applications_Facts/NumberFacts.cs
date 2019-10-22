@@ -112,14 +112,21 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
+        public void Test_SumCombinations_Should_Return_Primitive_Expression()
+        {
+            //Given, When
+            var expression = NumberOperations.GetSumCombinations(1, 1);
+            //Then
+            Assert.Equal(new[] { "1 = 1" }, expression);
+        }
+
+        [Fact]
         public void Test_SumCombinations_For_Simple_Case()
         {
-            //Given
-            var tuple = Tuple.Create(2, 3);
-            //When
-            var combinations = NumberOperations.GetSumCombinations(tuple.Item1, tuple.Item2);
+            //Given, When
+            var expression = NumberOperations.GetSumCombinations(2, 3);
             //Then
-            Assert.Equal(new[] { "1 + 2 = 3" }, combinations);
+            Assert.Equal(new[] { "1 + 2 = 3" }, expression);
         }
     }
 }
