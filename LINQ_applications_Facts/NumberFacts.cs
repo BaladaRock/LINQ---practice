@@ -128,5 +128,23 @@ namespace LINQ_applications_Facts
             //Then
             Assert.Equal(new[] { "1 + 2 = 3" }, expression);
         }
+
+        [Fact]
+        public void Test_SumCombinations_Should_Add_Minus_between_Operands()
+        {
+            //Given, When
+            var expression = NumberOperations.GetSumCombinations(2, -1);
+            //Then
+            Assert.Equal(new[] { "1 - 2 = -1" }, expression);
+        }
+
+        [Fact]
+        public void Test_SumCombinations_Should_Return_Unique_combination_MoreComplex_case()
+        {
+            //Given, When
+            var expression = NumberOperations.GetSumCombinations(3, 0);
+            //Then
+            Assert.Equal(new[] { "1 + 2 - 3 = 0" }, expression);
+        }
     }
 }

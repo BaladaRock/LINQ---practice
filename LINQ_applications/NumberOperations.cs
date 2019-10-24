@@ -28,9 +28,14 @@ namespace LINQ_applications
 
         public static IEnumerable<IEnumerable<char>> GetSumCombinations(int maxNumber, int numberToCheck)
         {
-            const string result = "1";
+            var numbers = new int[maxNumber].Select((x, index) => x + index + 1);
 
-            yield return string.Join(" = ", result, result);
+            string result =
+                numbers.Sum() == numberToCheck
+                    ? string.Join(" + ", numbers)
+                    : string.Join(" - ", numbers);
+
+            yield return string.Join(" = ", result, numberToCheck.ToString());
         }
 
         private static bool CheckSumOfElements(IEnumerable<int> array, int sum)
