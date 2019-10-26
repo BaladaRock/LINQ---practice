@@ -102,7 +102,7 @@ namespace LINQ_applications_Facts
         public void Test_PythagoreanNumbers_FinalTest()
         {
             //Given
-            int[] array = {1, 2, 3, 4, 5, 12, 13 };
+            int[] array = { 1, 2, 3, 4, 5, 12, 13 };
             //When
             var subSets = NumberOperations.GetPythagoreanNumbers(array);
             //Then
@@ -145,6 +145,30 @@ namespace LINQ_applications_Facts
             var expression = NumberOperations.GetSumCombinations(3, 0);
             //Then
             Assert.Equal(new[] { "1 + 2 - 3 = 0" }, expression);
+        }
+
+        [Fact]
+        public void Test_SumCombinations_Should_Return_More_Expressions_For_More_Complex_Case()
+        {
+            //Given, When
+            var expression = NumberOperations.GetSumCombinations(7, 10);
+            //Then
+            Assert.Equal(new[]
+            {
+                 "1 + 2 + 3 - 4 - 5 + 6 + 7 = 10",
+                 "1 + 2 - 3 + 4 + 5 - 6 + 7 = 10",
+                 "1 - 2 + 3 + 4 + 5 + 6 - 7 = 10",
+                 "1 - 2 - 3 - 4 + 5 + 6 + 7 = 10"
+            }, expression);
+        }
+
+        [Fact]
+        public void Test_SumCombinations_Should_Return_EmptyEnum_when_NoCombination_is_Possible()
+        {
+            //Given, When
+            var expression = NumberOperations.GetSumCombinations(2, 6);
+            //Then
+            Assert.Empty(expression);
         }
     }
 }

@@ -26,21 +26,47 @@ namespace LINQ_applications
                     result.SelectMany(c => GetTriplePermutations(a, b, c))));
         }
 
-        public static IEnumerable<IEnumerable<char>> GetSumCombinations(int maxNumber, int numberToCheck)
+        public static IEnumerable<string> GetSumCombinations(int maxNumber, int numberToCheck)
         {
-            var numbers = new int[maxNumber].Select((x, index) => x + index + 1);
-
-            string result =
-                numbers.Sum() == numberToCheck
-                    ? string.Join(" + ", numbers)
-                    : string.Join(" - ", numbers);
-
-            yield return string.Join(" = ", result, numberToCheck.ToString());
+            return GetAllCombinations("1", 1, 1, maxNumber, numberToCheck).Split("  ")
+                .Where(x => x != string.Empty);
         }
 
         private static bool CheckSumOfElements(IEnumerable<int> array, int sum)
         {
             return array.Sum() <= sum;
+        }
+
+        private static string GetAllCombinations(string expression, int index, int sum, int maxNumber, int toReach)
+        {
+            string result = string.Empty;
+            int nextIndex = index + 1;
+
+            if (index == maxNumber)
+            {
+                if (sum == toReach)
+                {
+                    result = string.Concat(expression, " = ", toReach.ToString(), "  ");
+                }
+            }
+            else
+            {
+                result += GetAllCombinations(
+                    string.Join(" + ", expression, nextIndex.ToString()),
+                    nextIndex,
+                    sum + nextIndex,
+                    maxNumber,
+                    toReach);
+
+                result += GetAllCombinations(
+                    string.Join(" - ", expression, nextIndex.ToString()),
+                    nextIndex,
+                    sum - nextIndex,
+                    maxNumber,
+                    toReach);
+            }
+
+            return result;
         }
 
         private static IEnumerable<int> GetSubSet(this IEnumerable<int> array, int startingPosition, int numbersToTake)
