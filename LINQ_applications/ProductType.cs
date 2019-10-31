@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace LINQ_applications
 {
     public class ProductType
     {
-        public string Name { get; set; }
-
         public ICollection<Feature> Features { get; set; }
+
+        public string Name { get; set; }
     }
 }

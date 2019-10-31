@@ -19,9 +19,9 @@ namespace LINQ_applications
             stock.Buy(3, "mere");
             stock.Buy(5, "mere");
 
-            foreach (var group in "AAbcd".GroupBy(x => x))
+            foreach (var element in "abc".Intersect("dfg").ToList())
             {
-                Console.WriteLine(group.Key);
+                Console.WriteLine(element);
             }
 
             Console.ReadKey();

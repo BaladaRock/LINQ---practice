@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace LINQ_applications
 {
@@ -16,10 +14,26 @@ namespace LINQ_applications
             featureList = features;
         }
 
-        public List<ProductType> FilterList(List<ProductType> listToFilter)
+        public List<ProductType> AllFeaturesFilter(List<ProductType> productList)
         {
             return productList.Where(product =>
-                 featureList.Intersect(product.Features, new IDComparer()).Any())
+                product.Features
+                 .GroupBy(x => x).Count() == featureList
+                   .GroupBy(x => x).Count())
+                .ToList();
+        }
+
+        public List<ProductType> AnyFeatureFilter(List<ProductType> listToFilter)
+        {
+            return productList.Where(product =>
+                 featureList.Intersect(product.Features, new IDComparer())
+                    .Any())
+                 .ToList();
+        }
+
+        public List<ProductType> NoFeatureFilter(List<ProductType> productList)
+        {
+            return productList.Except(AnyFeatureFilter(productList))
                  .ToList();
         }
     }
