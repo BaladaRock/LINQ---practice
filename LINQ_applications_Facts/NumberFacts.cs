@@ -1,5 +1,4 @@
 ﻿using LINQ_applications;
-using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -55,28 +54,6 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void Test_PythagoreanNumbers_Should_Return_Empty_Enumerable_for_ShortArray()
-        {
-            //Given
-            int[] array = { 1, 2 };
-            //When
-            var subSets = NumberOperations.GetPythagoreanNumbers(array);
-            //Then
-            Assert.Empty(subSets);
-        }
-
-        [Fact]
-        public void Test_PythagoreanNumbers_for_Longer_Array()
-        {
-            //Given
-            int[] array = { 1, 2, 3, 4, 5 };
-            //When
-            var subSets = NumberOperations.GetPythagoreanNumbers(array);
-            //Then
-            Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 } }, subSets);
-        }
-
-        [Fact]
         public void Test_PythagoreanNumbers_Check_That_AllCombinations_are_Checked()
         {
             //Given
@@ -85,17 +62,6 @@ namespace LINQ_applications_Facts
             var subSets = NumberOperations.GetPythagoreanNumbers(array);
             //Then
             Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 } }, subSets);
-        }
-
-        [Fact]
-        public void Test_PythagoreanNumbers_When_Array_Has_Repeating_Elements()
-        {
-            //Given
-            int[] array = { 0, 0, 0 };
-            //When
-            var subSets = NumberOperations.GetPythagoreanNumbers(array);
-            //Then
-            Assert.Equal(new[] { new[] { 0, 0, 0 } }, subSets);
         }
 
         [Fact]
@@ -112,12 +78,36 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void Test_SumCombinations_Should_Return_Primitive_Expression()
+        public void Test_PythagoreanNumbers_for_Longer_Array()
         {
-            //Given, When
-            var expression = NumberOperations.GetSumCombinations(1, 1);
+            //Given
+            int[] array = { 1, 2, 3, 4, 5 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
             //Then
-            Assert.Equal(new[] { "+1 = 1" }, expression);
+            Assert.Equal(new[] { new[] { 3, 4, 5 }, new[] { 4, 3, 5 } }, subSets);
+        }
+
+        [Fact]
+        public void Test_PythagoreanNumbers_Should_Return_Empty_Enumerable_for_ShortArray()
+        {
+            //Given
+            int[] array = { 1, 2 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
+            //Then
+            Assert.Empty(subSets);
+        }
+
+        [Fact]
+        public void Test_PythagoreanNumbers_When_Array_Has_Repeating_Elements()
+        {
+            //Given
+            int[] array = { 0, 0, 0 };
+            //When
+            var subSets = NumberOperations.GetPythagoreanNumbers(array);
+            //Then
+            Assert.Equal(new[] { new[] { 0, 0, 0 } }, subSets);
         }
 
         [Fact]
@@ -139,12 +129,12 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void Test_SumCombinations_Should_Return_Unique_combination_MoreComplex_case()
+        public void Test_SumCombinations_Should_Return_EmptyEnum_when_NoCombination_is_Possible()
         {
             //Given, When
-            var expression = NumberOperations.GetSumCombinations(3, 0);
+            var expression = NumberOperations.GetSumCombinations(2, 6);
             //Then
-            Assert.Equal(new[] { "+1+2-3 = 0", "-1-2+3 = 0" }, expression);
+            Assert.Empty(expression);
         }
 
         [Fact]
@@ -165,12 +155,21 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void Test_SumCombinations_Should_Return_EmptyEnum_when_NoCombination_is_Possible()
+        public void Test_SumCombinations_Should_Return_Primitive_Expression()
         {
             //Given, When
-            var expression = NumberOperations.GetSumCombinations(2, 6);
+            var expression = NumberOperations.GetSumCombinations(1, 1);
             //Then
-            Assert.Empty(expression);
+            Assert.Equal(new[] { "+1 = 1" }, expression);
+        }
+
+        [Fact]
+        public void Test_SumCombinations_Should_Return_Unique_combination_MoreComplex_case()
+        {
+            //Given, When
+            var expression = NumberOperations.GetSumCombinations(3, 0);
+            //Then
+            Assert.Equal(new[] { "+1+2-3 = 0", "-1-2+3 = 0" }, expression);
         }
     }
 }
