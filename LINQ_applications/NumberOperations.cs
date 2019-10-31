@@ -28,8 +28,13 @@ namespace LINQ_applications
 
         public static IEnumerable<string> GetSumCombinations(int maxNumber, int numberToCheck)
         {
-            return GetAllCombinations("1", 1, 1, maxNumber, numberToCheck).Split("  ")
-                .Where(x => x != string.Empty);
+            return GetAllCombinations(maxNumber, numberToCheck);
+        }
+
+        private static int CalculateSum(string source)
+        {
+            return Enumerable.Range(0, source.Length)
+                .Aggregate(0, (a, b) => source[b] == '+' ? a + 1 + b : a - 1 - b);
         }
 
         private static bool CheckSumOfElements(IEnumerable<int> array, int sum)
@@ -37,36 +42,14 @@ namespace LINQ_applications
             return array.Sum() <= sum;
         }
 
-        private static string GetAllCombinations(string expression, int index, int sum, int maxNumber, int toReach)
+        private static IEnumerable<string> GetAllCombinations(int maxNumber, int toReach)
         {
-            string result = string.Empty;
-            int nextIndex = index + 1;
-
-            if (index == maxNumber)
-            {
-                if (sum == toReach)
-                {
-                    result = string.Concat(expression, " = ", toReach.ToString(), "  ");
-                }
-            }
-            else
-            {
-                result += GetAllCombinations(
-                    string.Join(" + ", expression, nextIndex.ToString()),
-                    nextIndex,
-                    sum + nextIndex,
-                    maxNumber,
-                    toReach);
-
-                result += GetAllCombinations(
-                    string.Join(" - ", expression, nextIndex.ToString()),
-                    nextIndex,
-                    sum - nextIndex,
-                    maxNumber,
-                    toReach);
-            }
-
-            return result;
+            return Enumerable.Range(1, maxNumber)
+                 .Aggregate((IEnumerable<string>)new[] { "" }, (x, _) =>
+                     x.SelectMany(result => new[] { result + "+", result + "-" }))
+               .Where(a => CalculateSum(a) == toReach)
+                   .Select(element => string.Concat(element.Select((letter, i) => letter.ToString() + (i + 1)))
+                   + string.Concat(" = ", toReach.ToString()));
         }
 
         private static IEnumerable<int> GetSubSet(this IEnumerable<int> array, int startingPosition, int numbersToTake)

@@ -117,7 +117,7 @@ namespace LINQ_applications_Facts
             //Given, When
             var expression = NumberOperations.GetSumCombinations(1, 1);
             //Then
-            Assert.Equal(new[] { "1 = 1" }, expression);
+            Assert.Equal(new[] { "+1 = 1" }, expression);
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace LINQ_applications_Facts
             //Given, When
             var expression = NumberOperations.GetSumCombinations(2, 3);
             //Then
-            Assert.Equal(new[] { "1 + 2 = 3" }, expression);
+            Assert.Equal(new[] { "+1+2 = 3" }, expression);
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace LINQ_applications_Facts
             //Given, When
             var expression = NumberOperations.GetSumCombinations(2, -1);
             //Then
-            Assert.Equal(new[] { "1 - 2 = -1" }, expression);
+            Assert.Equal(new[] { "+1-2 = -1" }, expression);
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace LINQ_applications_Facts
             //Given, When
             var expression = NumberOperations.GetSumCombinations(3, 0);
             //Then
-            Assert.Equal(new[] { "1 + 2 - 3 = 0" }, expression);
+            Assert.Equal(new[] { "+1+2-3 = 0", "-1-2+3 = 0" }, expression);
         }
 
         [Fact]
@@ -155,10 +155,12 @@ namespace LINQ_applications_Facts
             //Then
             Assert.Equal(new[]
             {
-                 "1 + 2 + 3 - 4 - 5 + 6 + 7 = 10",
-                 "1 + 2 - 3 + 4 + 5 - 6 + 7 = 10",
-                 "1 - 2 + 3 + 4 + 5 + 6 - 7 = 10",
-                 "1 - 2 - 3 - 4 + 5 + 6 + 7 = 10"
+                 "+1+2+3-4-5+6+7 = 10",
+                 "+1+2-3+4+5-6+7 = 10",
+                 "+1-2+3+4+5+6-7 = 10",
+                 "+1-2-3-4+5+6+7 = 10",
+                 "-1+2-3+4-5+6+7 = 10",
+                 "-1-2+3+4+5-6+7 = 10"
             }, expression);
         }
 
