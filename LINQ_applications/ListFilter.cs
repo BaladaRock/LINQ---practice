@@ -14,27 +14,28 @@ namespace LINQ_applications
             featureList = features;
         }
 
-        public List<ProductType> AllFeaturesFilter(List<ProductType> productList)
+        public IEnumerable<ProductType> AllFeaturesFilter()
         {
-            return productList.Where(product =>
-                product.Features
-                 .GroupBy(x => x).Count() == featureList
-                   .GroupBy(x => x).Count())
-                .ToList();
+            return productList.Where(x =>
+                featureList.All(a => x.Features.Contains(a)));
         }
 
-        public List<ProductType> AnyFeatureFilter(List<ProductType> listToFilter)
+        public IEnumerable<ProductType> AnyFeatureFilter()
         {
             return productList.Where(product =>
-                 featureList.Intersect(product.Features, new IDComparer())
-                    .Any())
-                 .ToList();
+                 FindAtLeastOneFeature(product));
         }
 
-        public List<ProductType> NoFeatureFilter(List<ProductType> productList)
+        public IEnumerable<ProductType> NoFeatureFilter()
         {
-            return productList.Except(AnyFeatureFilter(productList))
-                 .ToList();
+            return productList.Where(product =>
+                 !FindAtLeastOneFeature(product));
+        }
+
+        private bool FindAtLeastOneFeature(ProductType product)
+        {
+            return featureList.Intersect(product.Features, new IDComparer())
+                                .Any();
         }
     }
 }

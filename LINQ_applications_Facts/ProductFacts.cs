@@ -1,5 +1,6 @@
 ﻿using LINQ_applications;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace LINQ_applications_Facts
@@ -39,11 +40,11 @@ namespace LINQ_applications_Facts
             //When
             var filteringCriteria = new List<Feature> { new Feature { Id = 5 }, secondFeature };
             var filter = new ListFilter(productList, filteringCriteria);
-            var filteredList = filter.AnyFeatureFilter(productList);
+            var filteredList = filter.AnyFeatureFilter();
 
             //Then
-            Assert.Equal(2, filteredList.Count);
-            Assert.Equal(pears, filteredList[0]);
+            Assert.Equal(2, filteredList.Count());
+            Assert.Equal(pears, filteredList.First());
         }
 
         [Fact]
@@ -79,10 +80,10 @@ namespace LINQ_applications_Facts
             //When
             var filteringCriteria = new List<Feature> { firstFeature, secondFeature };
             var filter = new ListFilter(productList, filteringCriteria);
-            var filteredList = filter.AnyFeatureFilter(productList);
+            var filteredList = filter.AnyFeatureFilter();
 
             //Then
-            Assert.Equal(3, filteredList.Count);
+            Assert.Equal(3, filteredList.Count());
         }
 
         [Fact]
@@ -107,7 +108,7 @@ namespace LINQ_applications_Facts
             //When
             var filteringCriteria = new List<Feature> { askedFeature };
             var filter = new ListFilter(productList, filteringCriteria);
-            var filteredList = filter.AnyFeatureFilter(productList);
+            var filteredList = filter.AnyFeatureFilter();
 
             //Then
             Assert.Single(filteredList);
@@ -136,7 +137,7 @@ namespace LINQ_applications_Facts
             //When
             var filteringCriteria = new List<Feature> { firstFeature, secondFeature };
             var filter = new ListFilter(productList, filteringCriteria);
-            var filteredList = filter.AllFeaturesFilter(productList);
+            var filteredList = filter.AllFeaturesFilter();
 
             //Then
             Assert.Single(filteredList);
@@ -176,7 +177,7 @@ namespace LINQ_applications_Facts
             //When
             var filteringCriteria = new List<Feature> { firstFeature, secondFeature, thirdFeature };
             var filter = new ListFilter(productList, filteringCriteria);
-            var filteredList = filter.AllFeaturesFilter(productList);
+            var filteredList = filter.AllFeaturesFilter();
 
             //Then
             Assert.Single(filteredList);
@@ -210,10 +211,10 @@ namespace LINQ_applications_Facts
             //When
             var filteringCriteria = new List<Feature> { firstFeature, secondFeature };
             var filter = new ListFilter(productList, filteringCriteria);
-            var filteredList = filter.NoFeatureFilter(productList);
+            var filteredList = filter.NoFeatureFilter();
 
             //Then
-            Assert.Equal(2, filteredList.Count);
+            Assert.Equal(2, filteredList.Count());
         }
 
         [Fact]
@@ -245,10 +246,30 @@ namespace LINQ_applications_Facts
             //When
             var filteringCriteria = new List<Feature> { firstFeature, secondFeature, thirdFeature };
             var filter = new ListFilter(productList, filteringCriteria);
-            var filteredList = filter.NoFeatureFilter(productList);
+            var filteredList = filter.NoFeatureFilter();
 
             //Then
             Assert.Empty(filteredList);
         }
+
+        /*[Fact]
+        public void Test_ListsJoin_Should_Merge_Simple_lists()
+        {
+            //Given
+
+            var product = new ProductType();
+            product.Pr
+
+            var productList = new List<ProductType> { apples, pears, nuts, watermelons };
+
+            //When
+            var filteringCriteria = new List<Feature> { new Feature { Id = 5 }, secondFeature };
+            var filter = new ListFilter(productList, filteringCriteria);
+            var filteredList = filter.AnyFeatureFilter(productList);
+
+            //Then
+            Assert.Equal(2, filteredList.Count);
+            Assert.Equal(pears, filteredList[0]);
+        }*/
     }
 }
