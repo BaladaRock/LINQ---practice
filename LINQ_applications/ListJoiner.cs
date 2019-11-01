@@ -17,7 +17,7 @@ namespace LINQ_applications_Facts
 
         public IEnumerable<ProductQuantity> JoinLists()
         {
-            return firstList.Zip(secondList, (x, y) => new ProductQuantity(x.Name, x.Quantity + y.Quantity));
+            return firstList.Join(secondList, x => x, y => y, (a, b) => a);
         }
     }
 }

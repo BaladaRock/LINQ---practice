@@ -16,8 +16,8 @@ namespace LINQ_applications
 
         public IEnumerable<ProductType> AllFeaturesFilter()
         {
-            return productList.Where(x =>
-                featureList.All(a => x.Features.Contains(a)));
+            return productList.Where(product =>
+                featureList.All(feature => product.Features.Contains(feature)));
         }
 
         public IEnumerable<ProductType> AnyFeatureFilter()
