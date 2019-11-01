@@ -5,7 +5,7 @@ using Xunit;
 
 namespace LINQ_applications_Facts
 {
-    public class ProductFacts
+    public class FilterFacts
     {
         [Fact]
         public void Should_Filter_List_Correctly_2_products_have_Identical_Names()
@@ -251,25 +251,5 @@ namespace LINQ_applications_Facts
             //Then
             Assert.Empty(filteredList);
         }
-
-        /*[Fact]
-        public void Test_ListsJoin_Should_Merge_Simple_lists()
-        {
-            //Given
-
-            var product = new ProductType();
-            product.Pr
-
-            var productList = new List<ProductType> { apples, pears, nuts, watermelons };
-
-            //When
-            var filteringCriteria = new List<Feature> { new Feature { Id = 5 }, secondFeature };
-            var filter = new ListFilter(productList, filteringCriteria);
-            var filteredList = filter.AnyFeatureFilter(productList);
-
-            //Then
-            Assert.Equal(2, filteredList.Count);
-            Assert.Equal(pears, filteredList[0]);
-        }*/
     }
 }
