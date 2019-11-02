@@ -1,23 +1,19 @@
-﻿using System;
+﻿using LINQ_applications;
+using System;
 using System.Collections.Generic;
 
 namespace LINQ_applications_Facts
 {
-    public class ProductQuantityComparer : IEqualityComparer<string>
+    public class ProductQuantityComparer : IEqualityComparer<KeyValuePair<string, int>>
     {
-        public bool Equals(string x, string y)
+        public bool Equals(KeyValuePair<string, int> x, KeyValuePair<string, int> y)
         {
-            return x == y;
+            return x.Key == y.Key;
         }
 
-        public int GetHashCode(string obj)
+        public int GetHashCode(KeyValuePair<string, int> obj)
         {
-            if (obj == null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
-
-            return obj.ToLower().GetHashCode();
+            return obj.Key.ToLower().GetHashCode();
         }
     }
 }

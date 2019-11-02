@@ -17,34 +17,42 @@ namespace LINQ_applications_Facts
 
         public IEnumerable<ProductQuantity> JoinLists()
         {
-            var firstDictionary = new Dictionary<string, int>(new ProductQuantityComparer());
+            Dictionary<string, int> firstDictionary = ConvertToDictionary(firstList);
+            Dictionary<string, int> secondDictionary = ConvertToDictionary(secondList);
 
-            var secondDictionary = new Dictionary<string, int>(new ProductQuantityComparer());
+            return MergeDictionaries(firstDictionary, secondDictionary)
+                .Select(x =>
+                   firstDictionary.Count >= secondDictionary.Count
+                     ? AddQuantities(x, firstDictionary, secondDictionary)
+                     : AddQuantities(x, secondDictionary, firstDictionary));
+        }
 
-            foreach (var element in firstList)
+        private static IEnumerable<KeyValuePair<string, int>> MergeDictionaries(Dictionary<string, int> firstDictionary, Dictionary<string, int> secondDictionary)
+        {
+            return firstDictionary.Union(secondDictionary, new ProductQuantityComparer());
+        }
+
+        private ProductQuantity AddQuantities(KeyValuePair<string, int> x, Dictionary<string, int> firstDictionary, Dictionary<string, int> secondDictionary)
+        {
+            string key = x.Key;
+            return secondDictionary.ContainsKey(key)
+                ? new ProductQuantity(key, firstDictionary[key] + secondDictionary[key])
+                : new ProductQuantity(key, firstDictionary[key]);
+        }
+
+        private Dictionary<string, int> ConvertToDictionary(List<ProductQuantity> list)
+        {
+            var dictionary = new Dictionary<string, int>();
+
+            foreach (var element in list)
             {
-                if (!firstDictionary.TryAdd(element.Name, element.Quantity))
+                if (!dictionary.TryAdd(element.Name, element.Quantity))
                 {
-                    firstDictionary[element.Name] += element.Quantity;
+                    dictionary[element.Name] += element.Quantity;
                 }
             }
 
-            foreach (var element in secondList)
-            {
-                if (!secondDictionary.TryAdd(element.Name, element.Quantity))
-                {
-                    secondDictionary[element.Name] += element.Quantity;
-                }
-            }
-
-            return firstDictionary.Join(
-                secondDictionary,
-                x => x.Key,
-                y => y.Key,
-                (a, b) =>
-                a.Key == b.Key
-                  ? new ProductQuantity(a.Key, a.Value + b.Value)
-                  : new ProductQuantity(b.Key, b.Value));
+            return dictionary;
         }
     }
 }
