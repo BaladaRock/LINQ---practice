@@ -11,7 +11,7 @@ namespace LINQ_applications
 
         public int GetHashCode(Feature feature)
         {
-            return feature.Id.ToString().ToLower().GetHashCode();
+            return feature.Id.GetHashCode();
         }
     }
 }

@@ -7,31 +7,6 @@ namespace LINQ_applications_Facts
     public class ListJoinerFacts
     {
         [Fact]
-        public void Test_ListJoiner_Simple_Lists()
-        {
-            //Given
-            var firstList = new List<ProductQuantity>
-            {
-                new ProductQuantity("car", 3)
-            };
-
-            var secondList = new List<ProductQuantity>
-            {
-                new ProductQuantity("car", 4)
-            };
-
-            //When
-            var joiner = new ListJoiner(firstList, secondList);
-
-            //Then
-            Assert.Equal(new[]
-            {
-                new ProductQuantity("car", 7)
-            }
-            , joiner.JoinLists());
-        }
-
-        [Fact]
         public void Test_ListJoiner_lists_contain_More_Elements()
         {
             //Given
@@ -60,7 +35,32 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void Test_ListJoiner_some_Products_May_Appear_more_than_Once()
+        public void Test_ListJoiner_Simple_Lists()
+        {
+            //Given
+            var firstList = new List<ProductQuantity>
+            {
+                new ProductQuantity("car", 3)
+            };
+
+            var secondList = new List<ProductQuantity>
+            {
+                new ProductQuantity("car", 4)
+            };
+
+            //When
+            var joiner = new ListJoiner(firstList, secondList);
+
+            //Then
+            Assert.Equal(new[]
+            {
+                new ProductQuantity("car", 7)
+            }
+            , joiner.JoinLists());
+        }
+
+        [Fact]
+        public void Test_ListJoiner_Same_Product_May_Appear_more_Times_in_FirstList()
         {
             //Given
             var firstList = new List<ProductQuantity>
@@ -78,14 +78,75 @@ namespace LINQ_applications_Facts
 
             //When
             var joiner = new ListJoiner(firstList, secondList);
-
+            var joinedList = joiner.JoinLists();
             //Then
             Assert.Equal(new[]
             {
                 new ProductQuantity("car", 11),
                 new ProductQuantity("bike", 8)
             }
-            , joiner.JoinLists());
+            , joinedList);
+        }
+
+        [Fact]
+        public void Test_ListJoiner_Same_Product_May_Appear_more_Times_in_both_Lists()
+        {
+            //Given
+            var firstList = new List<ProductQuantity>
+            {
+                new ProductQuantity("car", 3),
+                new ProductQuantity("car", 4),
+                new ProductQuantity("bike", 4)
+            };
+
+            var secondList = new List<ProductQuantity>
+            {
+                new ProductQuantity("car", 4),
+                new ProductQuantity("car", 4),
+                new ProductQuantity("bike", 4)
+            };
+
+            //When
+            var joiner = new ListJoiner(firstList, secondList);
+            var joinedList = joiner.JoinLists();
+            //Then
+            Assert.Equal(new[]
+            {
+                new ProductQuantity("car", 15),
+                new ProductQuantity("bike", 8)
+            }
+            , joinedList);
+        }
+
+        [Fact]
+        public void Test_ListJoiner_FirstList_is_SHORTER_Than_SecondList()
+        {
+            //Given
+            var firstList = new List<ProductQuantity>
+            {
+                new ProductQuantity("car", 3),
+                new ProductQuantity("phone", 2),
+            };
+
+            var secondList = new List<ProductQuantity>
+            {
+                new ProductQuantity("car", 4),
+                new ProductQuantity("car", 4),
+                new ProductQuantity("bike", 4),
+                new ProductQuantity("phone", 2)
+            };
+
+            //When
+            var joiner = new ListJoiner(firstList, secondList);
+            var joinedList = joiner.JoinLists();
+            //Then
+            Assert.Equal(new[]
+            {
+                new ProductQuantity("car", 11),
+                new ProductQuantity("phone", 4),
+                new ProductQuantity("bike", 4)
+            }
+            , joinedList);
         }
     }
 }
