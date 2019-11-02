@@ -44,12 +44,9 @@ namespace LINQ_applications_Facts
         {
             var dictionary = new Dictionary<string, int>();
 
-            foreach (var element in list)
+            foreach (var element in list.Where(x => !dictionary.TryAdd(x.Name, x.Quantity)))
             {
-                if (!dictionary.TryAdd(element.Name, element.Quantity))
-                {
-                    dictionary[element.Name] += element.Quantity;
-                }
+                dictionary[element.Name] += element.Quantity;
             }
 
             return dictionary;
