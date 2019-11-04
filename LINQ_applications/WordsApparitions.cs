@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace LINQ_applications_Facts
@@ -15,9 +14,12 @@ namespace LINQ_applications_Facts
 
         public IEnumerable<string> GetMostUsed()
         {
+            const string toJoin = "\"";
+
             return Text.GroupBy(x => x.ToLower())
                 .OrderByDescending(x => x.Count())
-                .Select(x => x.Key);
+                .Select(x =>
+                  string.Join(" - ", string.Join(x.Key, toJoin, toJoin), x.Count().ToString()));
         }
     }
 }

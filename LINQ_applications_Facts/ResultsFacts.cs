@@ -1,31 +1,11 @@
 ﻿using LINQ_applications;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace LINQ_applications_Facts
 {
     public class ResultsFacts
     {
-        [Fact]
-        public void Test_Results_List_contains_TWO_simple_families()
-        {
-            //Given
-
-            var firstFamily = new TestResults(id: "Ionescu", familyId: "I", score: 10);
-            var secondFamily = new TestResults(id: "Popescu", familyId: "P", score: 5);
-            var list = new List<TestResults> { firstFamily, secondFamily };
-
-            //When
-            var resultsMaximum = new ResultsMaximum(list);
-            var filteredList = resultsMaximum.GetMaxPerFamily();
-
-            var result = new[] { firstFamily, secondFamily };
-
-            //Then
-            Assert.Empty(filteredList.Except(result, new TestResultComparer()));
-        }
-
         [Fact]
         public void Test_Results_List_contains_More_simple_families()
         {
@@ -41,10 +21,8 @@ namespace LINQ_applications_Facts
             var resultsMaximum = new ResultsMaximum(list);
             var filteredList = resultsMaximum.GetMaxPerFamily();
 
-            var result = new[] { secondResult, thirdResult };
-
             //Then
-            Assert.Empty(filteredList.Except(result, new TestResultComparer()));
+            Assert.Equal(new[] { thirdResult, secondResult }, filteredList);
         }
 
         [Fact]
@@ -63,10 +41,25 @@ namespace LINQ_applications_Facts
             var resultsMaximum = new ResultsMaximum(list);
             var filteredList = resultsMaximum.GetMaxPerFamily();
 
-            var result = new[] { secondResult, thirdResult };
+            //Then
+            Assert.Equal(new[] { thirdResult, secondResult }, filteredList);
+        }
+
+        [Fact]
+        public void Test_Results_List_contains_TWO_simple_families()
+        {
+            //Given
+
+            var firstFamily = new TestResults(id: "Ionescu", familyId: "I", score: 10);
+            var secondFamily = new TestResults(id: "Popescu", familyId: "P", score: 5);
+            var list = new List<TestResults> { firstFamily, secondFamily };
+
+            //When
+            var resultsMaximum = new ResultsMaximum(list);
+            var filteredList = resultsMaximum.GetMaxPerFamily();
 
             //Then
-            Assert.Empty(filteredList.Except(result, new TestResultComparer()));
+            Assert.Equal(new[] { firstFamily, secondFamily }, filteredList);
         }
     }
 }
