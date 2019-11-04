@@ -26,7 +26,7 @@ namespace LINQ_applications_Facts
 
             //When
             var joiner = new ListJoiner(firstList, secondList);
-            var joinedList = joiner.JoinLists();
+            var joinedList = joiner.MergeLists();
             //Then
             Assert.Equal(new[]
             {
@@ -62,7 +62,37 @@ namespace LINQ_applications_Facts
                 new ProductQuantity("car", 7),
                 new ProductQuantity("bike", 8)
             }
-            , joiner.JoinLists());
+            , joiner.MergeLists());
+        }
+
+        [Fact]
+        public void Test_ListJoiner_Lists_Have_No_common_Elements()
+        {
+            //Given
+            var firstList = new List<ProductQuantity>
+            {
+                new ProductQuantity("car", 3),
+                new ProductQuantity("phone", 2),
+            };
+
+            var secondList = new List<ProductQuantity>
+            {
+                new ProductQuantity("bike", 4),
+                new ProductQuantity("motorcycle", 2)
+            };
+
+            //When
+            var joiner = new ListJoiner(firstList, secondList);
+            var joinedList = joiner.MergeLists();
+            //Then
+            Assert.Equal(new[]
+            {
+                new ProductQuantity("car", 3),
+                new ProductQuantity("phone", 2),
+                new ProductQuantity("bike", 4),
+                new ProductQuantity("motorcycle", 2),
+            }
+            , joinedList);
         }
 
         [Fact]
@@ -85,7 +115,7 @@ namespace LINQ_applications_Facts
 
             //When
             var joiner = new ListJoiner(firstList, secondList);
-            var joinedList = joiner.JoinLists();
+            var joinedList = joiner.MergeLists();
             //Then
             Assert.Equal(new[]
             {
@@ -114,7 +144,7 @@ namespace LINQ_applications_Facts
 
             //When
             var joiner = new ListJoiner(firstList, secondList);
-            var joinedList = joiner.JoinLists();
+            var joinedList = joiner.MergeLists();
             //Then
             Assert.Equal(new[]
             {
@@ -146,7 +176,7 @@ namespace LINQ_applications_Facts
             {
                 new ProductQuantity("car", 7)
             }
-            , joiner.JoinLists());
+            , joiner.MergeLists());
         }
     }
 }
