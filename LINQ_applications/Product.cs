@@ -5,11 +5,11 @@
         public Product(string name, int quantity)
         {
             Name = name;
-            Number = quantity;
+            Quantity = quantity;
         }
 
         public string Name { get; }
 
-        public int Number { get; }
+        public int Quantity { get; }
     }
 }

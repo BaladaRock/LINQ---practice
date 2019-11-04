@@ -33,7 +33,7 @@ namespace LINQ_applications
             {
                 ThrowNull(product);
                 ThrowInvalidOperation(product);
-                ThrowInvalidParameter(product.Number);
+                ThrowInvalidParameter(product.Quantity);
 
                 products = products.Append(product).ToList();
             }
@@ -47,7 +47,7 @@ namespace LINQ_applications
             ThrowInvalidParameter(quantity);
 
             RemoveProduct(foundNode);
-            products = products.Append(new Product(foundNode.Name, foundNode.Number + quantity)).ToList();
+            products = products.Append(new Product(foundNode.Name, foundNode.Quantity + quantity)).ToList();
         }
 
         public void Buy(int productsToBuy, string productName)
@@ -56,11 +56,11 @@ namespace LINQ_applications
             ThrowNull(foundNode);
             ThrowInvalidParameter(productsToBuy);
 
-            var newProduct = new Product(foundNode.Name, foundNode.Number - productsToBuy);
+            var newProduct = new Product(foundNode.Name, foundNode.Quantity - productsToBuy);
             RemoveProduct(foundNode);
             products = products.Append(newProduct).ToList();
 
-            CallBackProduct(newProduct, foundNode.Number);
+            CallBackProduct(newProduct, foundNode.Quantity);
         }
 
         public int GetQuantity(Product product)
@@ -68,7 +68,7 @@ namespace LINQ_applications
             ThrowNull(product);
             ThrowNotInStock(product);
 
-            return products.Single(x => x.Name == product.Name).Number;
+            return products.Single(x => x.Name == product.Name).Quantity;
         }
 
         private void CallBackProduct(Product product, int oldQuantity)
@@ -78,12 +78,12 @@ namespace LINQ_applications
                 return;
             }
 
-            callback(product, product.Number);
+            callback(product, product.Quantity);
         }
 
         private bool CheckCallBack(Product product, int oldQuantity)
         {
-            var currentQuantity = product.Number;
+            var currentQuantity = product.Quantity;
 
             return CheckQuantities(oldQuantity, currentQuantity, 10)
                 || CheckQuantities(oldQuantity, currentQuantity, 5)
