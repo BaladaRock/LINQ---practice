@@ -1,8 +1,7 @@
-﻿using LINQ_applications;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace LINQ_applications_Facts
+namespace LINQ_applications
 {
     public class ListJoiner
     {

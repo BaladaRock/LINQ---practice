@@ -543,7 +543,7 @@
     <Rule Id="S2760" Action="Error" />
     <Rule Id="S2761" Action="Error" />
     <Rule Id="S2930" Action="Error" />
-    <Rule Id="S2933" Action="Error" />
+    <Rule Id="S2933" Action="Warning" />
     <Rule Id="S2934" Action="Error" />
     <Rule Id="S2953" Action="Error" />
     <Rule Id="S2971" Action="Error" />

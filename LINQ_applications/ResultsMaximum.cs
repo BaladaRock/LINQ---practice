@@ -1,8 +1,7 @@
-﻿using LINQ_applications;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace LINQ_applications_Facts
+namespace LINQ_applications
 {
     public class ResultsMaximum
     {
@@ -17,8 +16,13 @@ namespace LINQ_applications_Facts
         {
             return list.GroupBy(x => x.FamilyId)
                     .Select(x =>
-                        x.OrderByDescending(y => y.Score)
-                           .First());
+                    {
+                        var seed = x.First();
+                        return x.Aggregate(seed, (max, current) =>
+                            current.Score > max.Score
+                                ? current
+                                : max);
+                    });
         }
     }
 }

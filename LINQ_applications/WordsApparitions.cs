@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace LINQ_applications_Facts
+namespace LINQ_applications
 {
     public class WordsApparitions
     {
         public WordsApparitions(string[] text)
         {
-            Text = text;
+            Text = text ?? throw new ArgumentNullException(nameof(text));
         }
 
         public IEnumerable<string> Text { get; set; }
