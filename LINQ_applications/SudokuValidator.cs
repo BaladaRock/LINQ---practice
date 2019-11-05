@@ -15,7 +15,9 @@ namespace LINQ_applications
 
         public bool CheckSudoku()
         {
-            return square.GroupBy(x => x).Count() == square.Count();
+            return square.SelectMany((a, _) =>
+                a.Select(b => b)
+                    .GroupBy(x => x)).Max(y => y.Count()) == 1;
         }
     }
 }
