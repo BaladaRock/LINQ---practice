@@ -15,9 +15,12 @@ namespace LINQ_applications
 
         public bool CheckSudoku()
         {
+            var checkDigitsApparitions = !square.SelectMany(a => a.Select(b => Convert.ToInt32(b)))
+                 .Except(Enumerable.Range(1, square.Count())).Any();
+
             return square.SelectMany((a, _) =>
                 a.Select(b => b)
-                    .GroupBy(x => x)).Max(y => y.Count()) == 1;
+                    .GroupBy(x => x)).Max(y => y.Count()) == 1 && checkDigitsApparitions;
         }
     }
 }

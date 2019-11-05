@@ -14,7 +14,7 @@ namespace LINQ_applications_Facts
             //Given
             IEnumerable<IEnumerable<byte>> square = new[]
             {
-                new byte[]{ 1, 2 },
+                new byte[] { 1, 2 },
                 new byte[] { 2, 1 }
             };
             //When
@@ -29,7 +29,7 @@ namespace LINQ_applications_Facts
             //Given
             IEnumerable<IEnumerable<byte>> square = new[]
             {
-                new byte[]{ 1, 1 },
+                new byte[] { 1, 1 },
                 new byte[] { 3, 4 }
             };
             //When
@@ -61,13 +61,30 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void CheckSudoku_Check_Elements_Integrity_for_2x2_Square()
+        public void CheckSudoku_Check_Elements_Line_Integrity_for_2x2_Square()
         {
             //Given
             IEnumerable<IEnumerable<byte>> square = new[]
             {
-                new byte[]{ 1 },
+                new byte[] { 1, 3 },
                 new byte[] { 2, 1 }
+            };
+            //When
+            var validator = new SudokuValidator(square);
+            //Then
+            Assert.False(validator.CheckSudoku());
+        }
+
+        [Fact]
+        public void CheckSudoku_Check_Elements_Integrity_for_Larger_Square()
+        {
+            //Given
+            IEnumerable<IEnumerable<byte>> square = new[]
+            {
+                new byte[] { 1, 2, 3, 4 },
+                new byte[] { 2, 3, 1, 4 },
+                new byte[] { 1, 2, 3, 4 },
+                new byte[] {15, 2, 3, 4 }
             };
             //When
             var validator = new SudokuValidator(square);
