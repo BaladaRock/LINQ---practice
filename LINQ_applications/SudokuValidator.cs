@@ -6,21 +6,36 @@ namespace LINQ_applications
 {
     public class SudokuValidator
     {
-        private readonly IEnumerable<IEnumerable<byte>> square;
+        private readonly byte[][] square;
 
-        public SudokuValidator(IEnumerable<IEnumerable<byte>> square)
+        public SudokuValidator(byte[][] square)
         {
             this.square = square;
         }
 
         public bool CheckSudoku()
         {
-            var checkDigitsApparitions = !square.SelectMany(a => a.Select(b => Convert.ToInt32(b)))
-                 .Except(Enumerable.Range(1, square.Count())).Any();
+            int count = square.Length;
+            /*if (count != 9)
+            {
+                return false;
+            }*/
 
+            var columns = Enumerable.Range(0, count)
+                .Select(index => square
+                    .Select(col => col[index]));
+
+            bool checkDigitsApparitions = !square.SelectMany(a => a.Select(b => Convert.ToInt32(b)))
+                 .Except(Enumerable.Range(1, count)).Any();
+
+            return CheckRepetitions(square) && CheckRepetitions(columns) && checkDigitsApparitions;
+        }
+
+        private bool CheckRepetitions(IEnumerable<IEnumerable<byte>> square)
+        {
             return !square.SelectMany((a, _) =>
-                a.Select(b => b)
-                    .GroupBy(x => x)).Any(y => y.Count() > 1) && checkDigitsApparitions;
+                            a.Select(b => b)
+                                .GroupBy(x => x)).Any(y => y.Count() > 1);
         }
     }
 }
