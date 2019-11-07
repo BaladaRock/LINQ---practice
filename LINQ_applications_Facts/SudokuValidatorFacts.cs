@@ -91,5 +91,20 @@ namespace LINQ_applications_Facts
             //Then
             Assert.False(validator.CheckSudoku());
         }
+
+        [Fact]
+        public void CheckSudoku_Check_elements_UNICITY_Elements_Repeat_on_Coloumn()
+        {
+            //Given
+            IEnumerable<IEnumerable<byte>> square = new[]
+            {
+                new byte[] { 1, 2 },
+                new byte[] { 1, 2 }
+            };
+            //When
+            var validator = new SudokuValidator(square);
+            //Then
+            Assert.False(validator.CheckSudoku());
+        }
     }
 }
