@@ -16,10 +16,10 @@ namespace LINQ_applications
         public bool CheckSudoku()
         {
             int count = square.Length;
-            /*if (count != 9)
+            if (count != 9)
             {
                 return false;
-            }*/
+            }
 
             var columns = Enumerable.Range(0, count)
                 .Select(index => square

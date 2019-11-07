@@ -9,7 +9,7 @@ namespace LINQ_applications_Facts
     public class SudokuValidatorFacts
     {
         [Fact]
-        public void CheckSudoku_SimpleCase_2x2_Square_CorrectFormat()
+        public void CheckSudoku_SimpleCase_2x2_Square_CorrectFormat_But_Smaller_Size()
         {
             //Given
             byte[][] square = new[]
@@ -20,7 +20,7 @@ namespace LINQ_applications_Facts
             //When
             var validator = new SudokuValidator(square);
             //Then
-            Assert.True(validator.CheckSudoku());
+            Assert.False(validator.CheckSudoku());
         }
 
         [Fact]
