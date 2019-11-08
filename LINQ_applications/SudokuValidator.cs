@@ -25,17 +25,21 @@ namespace LINQ_applications
                 .Select(index => square
                     .Select(col => col[index]));
 
-            bool checkDigitsApparitions = !square.SelectMany(a => a.Select(b => Convert.ToInt32(b)))
+            bool checkDigitsApparitions = square.SelectMany(a => a.Select(b => Convert.ToInt32(b)))
                  .Except(Enumerable.Range(1, count)).Any();
 
-            return CheckRepetitions(square) && CheckRepetitions(columns) && checkDigitsApparitions;
+            return !checkDigitsApparitions &&
+                   CheckRepetitions(square, count) ||
+                   CheckRepetitions(columns, count);
         }
 
-        private bool CheckRepetitions(IEnumerable<IEnumerable<byte>> square)
+        private bool CheckByteLine(IEnumerable<byte> line, int count)
         {
-            return !square.SelectMany((a, _) =>
-                            a.Select(b => b)
-                                .GroupBy(x => x)).Any(y => y.Count() > 1);
+            bool elementsIntegrity = line.Select(_ => Convert.ToInt32(_))
+                .Except(Enumerable.Range(1, count))
+                .Any();
+
+            return elementsIntegrity || line.Count() != line.Distinct().Count();
         }
     }
 }
