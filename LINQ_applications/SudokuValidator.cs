@@ -21,25 +21,35 @@ namespace LINQ_applications
                 return false;
             }
 
-            var columns = Enumerable.Range(0, count)
+            bool checkBlocks = Enumerable.Range(0, count)
+                .Select(index =>
+                    GetInnerBlock((index / 3) * 3, (index % 3) * 3))
+                    .All(y => CheckByteLine(y, count));
+
+            bool checkColumns = Enumerable.Range(0, count)
                 .Select(index => square
-                    .Select(col => col[index]));
+                        .Select(col => col[index]))
+                   .All(y => CheckByteLine(y, count));
 
-            bool checkDigitsApparitions = square.SelectMany(a => a.Select(b => Convert.ToInt32(b)))
-                 .Except(Enumerable.Range(1, count)).Any();
+            bool checkLines = square.Select(x => x).All(y => CheckByteLine(y, count));
 
-            return !checkDigitsApparitions &&
-                   CheckRepetitions(square, count) ||
-                   CheckRepetitions(columns, count);
+            return checkColumns && checkLines && checkBlocks;
         }
 
         private bool CheckByteLine(IEnumerable<byte> line, int count)
         {
-            bool elementsIntegrity = line.Select(_ => Convert.ToInt32(_))
+            bool elementsIntegrity = !line.Select(_ => Convert.ToInt32(_))
                 .Except(Enumerable.Range(1, count))
                 .Any();
 
-            return elementsIntegrity || line.Count() != line.Distinct().Count();
+            return elementsIntegrity && line.Count() == line.Distinct().Count();
+        }
+
+        private IEnumerable<byte> GetInnerBlock(int lineIndex, int columnIndex)
+        {
+            return Enumerable.Range(lineIndex, 3)
+                .SelectMany(x => Enumerable.Range(columnIndex, 3)
+                     .Select(y => square[x][y]));
         }
     }
 }
