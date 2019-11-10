@@ -16,33 +16,35 @@ namespace LINQ_applications
         public bool CheckSudoku()
         {
             int count = square.Length;
-            if (count != 9)
+
+            if (count != 9 || square.Select(x => x)
+                  .Any(y => !CheckByteLine(y, count)))
             {
                 return false;
             }
 
-            bool checkBlocks = Enumerable.Range(0, count)
-                .Select(index =>
-                    GetInnerBlock((index / 3) * 3, (index % 3) * 3))
-                    .All(y => CheckByteLine(y, count));
-
-            bool checkColumns = Enumerable.Range(0, count)
-                .Select(index => square
-                        .Select(col => col[index]))
-                   .All(y => CheckByteLine(y, count));
-
-            bool checkLines = square.Select(x => x).All(y => CheckByteLine(y, count));
-
-            return checkColumns && checkLines && checkBlocks;
+            return CheckEnumerable("columns", count) && CheckEnumerable("blocks", count);
         }
 
         private bool CheckByteLine(IEnumerable<byte> line, int count)
         {
-            bool elementsIntegrity = !line.Select(_ => Convert.ToInt32(_))
-                .Except(Enumerable.Range(1, count))
-                .Any();
+            bool elementsIntegrity = line.Select(x => Convert.ToInt32(x))
+                .All(y => Enumerable.Range(1, count).Contains(y));
 
-            return elementsIntegrity && line.Count() == line.Distinct().Count();
+            return elementsIntegrity &&
+                line.Count() == line.Distinct().Count();
+        }
+
+        private bool CheckEnumerable(string toCheck, int count)
+        {
+            var inner = Enumerable.Range(0, count).Select(index =>
+            {
+                return toCheck == "blocks"
+                   ? GetInnerBlock(index / 3 * 3, index % 3 * 3)
+                   : square.Select(col => col[index]);
+            });
+
+            return inner.All(y => CheckByteLine(y, count));
         }
 
         private IEnumerable<byte> GetInnerBlock(int lineIndex, int columnIndex)
