@@ -156,13 +156,15 @@ namespace LINQ_applications_Facts
         }
 
         [Fact]
-        public void CheckSudoku_SimpleCase_2x2_Square_CorrectFormat_But_Smaller_Size()
+        public void CheckSudoku_SimpleCase_4x4_Square_InnerBlock_Repetition()
         {
             //Given
             byte[][] square =
             {
-                new byte[] { 1, 2 },
-                new byte[] { 2, 1 }
+                new byte[] { 1, 2, 3, 4 },
+                new byte[] { 2, 1, 4, 3 },
+                new byte[] { 3, 4, 1, 2 },
+                new byte[] { 4, 3, 2, 1 },
             };
             //When
             var validator = new SudokuValidator(square);

@@ -27,8 +27,28 @@ namespace LINQ_applications
             return expressionStack.Pop().ToString();
         }
 
-        private static char CalculateOperation(string operands, char element)
+        private static char CalculateOperation(string operands, char @operator)
         {
+            int firstOperand = Convert.ToInt32(operands[0]);
+            int secondOperand = Convert.ToInt32(operands[1]);
+            /*char result = ' ';
+
+            switch (@operator)
+            {
+                case '+':
+                    result = Convert.ToChar(firstOperand + secondOperand);
+                    return result;
+                case '-':
+                    result = (firstOperand - secondOperand) - '0';
+                    return result;
+                case '*':
+                    result = (firstOperand * secondOperand) - '0';
+                    return result;
+                default:
+                    result = (firstOperand * secondOperand) - '0';
+                    return result;
+            }*/
+
             return '3';
         }
 

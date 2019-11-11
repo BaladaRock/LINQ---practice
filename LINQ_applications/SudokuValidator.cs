@@ -16,14 +16,24 @@ namespace LINQ_applications
         public bool CheckSudoku()
         {
             int count = square.Length;
+            int squareSize = (int)Math.Sqrt(count);
+            var digits = Enumerable.Range(0, count);
 
-            if (count != 9 || square.Select(x => x)
-                  .Any(y => !CheckByteLine(y, count)))
-            {
-                return false;
-            }
+            var lines = square.Select(x => x);
+            var columns = digits
+                .Select(index => square.Select(col => col[index]));
+            var squares = digits
+                .Select(index =>
+                    GetInnerBlock(
+                        index / squareSize * squareSize,
+                        index % squareSize * squareSize,
+                        squareSize));
 
-            return GenerateAndCheck("columns", count) && GenerateAndCheck("blocks", count);
+            var all = lines
+                .Concat(columns)
+                .Concat(squares);
+
+            return all.All(y => CheckByteLine(y, count));
         }
 
         private bool CheckByteLine(IEnumerable<byte> line, int count)
@@ -35,22 +45,10 @@ namespace LINQ_applications
                 line.Count() == line.Distinct().Count();
         }
 
-        private bool GenerateAndCheck(string toCheck, int count)
+        private IEnumerable<byte> GetInnerBlock(int lineIndex, int columnIndex, int count)
         {
-            var inner = Enumerable.Range(0, count).Select(index =>
-            {
-                return toCheck == "blocks"
-                   ? GetInnerBlock(index / 3 * 3, index % 3 * 3)
-                   : square.Select(col => col[index]);
-            });
-
-            return inner.All(y => CheckByteLine(y, count));
-        }
-
-        private IEnumerable<byte> GetInnerBlock(int lineIndex, int columnIndex)
-        {
-            return Enumerable.Range(lineIndex, 3)
-                .SelectMany(x => Enumerable.Range(columnIndex, 3)
+            return Enumerable.Range(lineIndex, count)
+                .SelectMany(x => Enumerable.Range(columnIndex, count)
                      .Select(y => square[x][y]));
         }
     }
