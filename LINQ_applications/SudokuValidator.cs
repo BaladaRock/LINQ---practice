@@ -23,7 +23,7 @@ namespace LINQ_applications
                 return false;
             }
 
-            return CheckEnumerable("columns", count) && CheckEnumerable("blocks", count);
+            return GenerateAndCheck("columns", count) && GenerateAndCheck("blocks", count);
         }
 
         private bool CheckByteLine(IEnumerable<byte> line, int count)
@@ -35,7 +35,7 @@ namespace LINQ_applications
                 line.Count() == line.Distinct().Count();
         }
 
-        private bool CheckEnumerable(string toCheck, int count)
+        private bool GenerateAndCheck(string toCheck, int count)
         {
             var inner = Enumerable.Range(0, count).Select(index =>
             {
