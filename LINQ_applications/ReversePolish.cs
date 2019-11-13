@@ -11,17 +11,16 @@ namespace LINQ_applications
             const int ToSkip = 2;
 
             ThrowNull(expression);
-            IEnumerable<string> sum = expression.Split();
 
-            return sum.Aggregate(
-                   Enumerable.Empty<double>(),
-                   (operands, current) => IsOperator(current)
-                      ? UpdateSum(operands, current, ToSkip)
-                      : operands.Append(Convert.ToDouble(current)))
+            return expression.Split().Aggregate(
+                        Enumerable.Empty<double>(),
+                        (operands, current) => IsOperator(current)
+                            ? UpdateResult(operands, current, ToSkip)
+                            : operands.Append(Convert.ToDouble(current)))
                   .First();
         }
 
-        private static IEnumerable<double> UpdateSum(IEnumerable<double> operands, string current, int skip)
+        private static IEnumerable<double> UpdateResult(IEnumerable<double> operands, string current, int skip)
         {
             return operands.SkipLast(skip)
                 .Append(ApplyOperator(
