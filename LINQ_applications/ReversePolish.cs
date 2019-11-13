@@ -6,55 +6,63 @@ namespace LINQ_applications
 {
     public class ReversePolish
     {
-        public static string CalculateExpression(string expression)
+        public static double CalculateExpression(string expression)
         {
-            var expressionStack = new Stack<char>();
+            const int ToSkip = 2;
 
-            foreach (var element in expression.Select(x => x).Where(y => y != ' '))
-            {
-                if (IsOperand(element))
-                {
-                    expressionStack.Push(element);
-                }
-                else
-                {
-                    string operands = string.Concat(expressionStack.Pop(), expressionStack.Pop());
-                    char result = CalculateOperation(operands, element);
-                    expressionStack.Push(result);
-                }
-            }
+            ThrowNull(expression);
+            IEnumerable<string> sum = expression.Split();
 
-            return expressionStack.Pop().ToString();
+            return sum.Aggregate(
+                   Enumerable.Empty<double>(),
+                   (operands, current) => IsOperator(current)
+                      ? UpdateSum(operands, current, ToSkip)
+                      : operands.Append(Convert.ToDouble(current)))
+                  .First();
         }
 
-        private static char CalculateOperation(string operands, char @operator)
+        private static IEnumerable<double> UpdateSum(IEnumerable<double> operands, string current, int skip)
         {
-            int firstOperand = Convert.ToInt32(operands[0]);
-            int secondOperand = Convert.ToInt32(operands[1]);
-            /*char result = ' ';
+            return operands.SkipLast(skip)
+                .Append(ApplyOperator(
+                    operands.TakeLast(skip),
+                    current));
+        }
+
+        private static double ApplyOperator(IEnumerable<double> operands, string @operator)
+        {
+            double firstOperand = operands.First();
+            double secondOperand = operands.Last();
 
             switch (@operator)
             {
-                case '+':
-                    result = Convert.ToChar(firstOperand + secondOperand);
-                    return result;
-                case '-':
-                    result = (firstOperand - secondOperand) - '0';
-                    return result;
-                case '*':
-                    result = (firstOperand * secondOperand) - '0';
-                    return result;
-                default:
-                    result = (firstOperand * secondOperand) - '0';
-                    return result;
-            }*/
+                case "+":
+                    return firstOperand + secondOperand;
 
-            return '3';
+                case "-":
+                    return firstOperand - secondOperand;
+
+                case "*":
+                    return firstOperand * secondOperand;
+
+                default:
+                    return firstOperand / secondOperand;
+            }
         }
 
-        private static bool IsOperand(char element)
+        private static bool IsOperator(string element)
         {
-            return !"+-*/ ".Contains(element);
+            return "+-*/".Contains(element);
+        }
+
+        private static void ThrowNull(string expression)
+        {
+            if (expression != null)
+            {
+                return;
+            }
+
+            throw new ArgumentNullException(nameof(expression));
         }
     }
 }
